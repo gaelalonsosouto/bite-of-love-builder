@@ -1,5 +1,24 @@
 import { Link } from "@tanstack/react-router";
 
+function JustEatBadge() {
+  return (
+    <svg viewBox="0 0 24 24" width={16} height={16} aria-hidden className="shrink-0">
+      <rect x="1" y="1" width="22" height="22" rx="6" fill="#FFFFFF" />
+      <text
+        x="12"
+        y="16.5"
+        textAnchor="middle"
+        fontFamily="Archivo Black, Impact, sans-serif"
+        fontSize="10"
+        fontWeight="900"
+        fill="#FF8000"
+      >
+        je
+      </text>
+    </svg>
+  );
+}
+
 export function SiteHeader() {
   return (
     <header className="fixed top-0 inset-x-0 z-50 backdrop-blur-md bg-ink/80 border-b border-border/60">
@@ -15,8 +34,10 @@ export function SiteHeader() {
             href="https://www.just-eat.es/restaurants-frankys-burger-a-coruna/menu"
             target="_blank"
             rel="noopener noreferrer"
-            className="hover-glow bg-tomato text-cream px-4 py-2 rounded-full text-xs sm:text-sm font-semibold"
+            style={{ backgroundColor: "#FF8000" }}
+            className="hover-glow inline-flex items-center gap-2 text-white px-4 py-2 rounded-full text-xs sm:text-sm font-semibold"
           >
+            <JustEatBadge />
             Pedir online
           </a>
         </nav>
