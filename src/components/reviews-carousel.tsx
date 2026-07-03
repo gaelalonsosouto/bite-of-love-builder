@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
-import { Star } from "lucide-react";
+import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 
 export type Review = {
   author: string;
@@ -14,12 +14,17 @@ const MAPS_URL =
 export function ReviewsCarousel({ reviews }: { reviews: Review[] }) {
   const [i, setI] = useState(0);
   const reduce = useReducedMotion();
+  const [paused, setPaused] = useState(false);
+  const touchStartX = useRef<number | null>(null);
 
   useEffect(() => {
-    if (reduce) return;
+    if (reduce || paused) return;
     const id = setInterval(() => setI((n) => (n + 1) % reviews.length), 5500);
     return () => clearInterval(id);
-  }, [reviews.length, reduce]);
+  }, [reviews.length, reduce, paused]);
+
+  const next = () => setI((n) => (n + 1) % reviews.length);
+  const prev = () => setI((n) => (n - 1 + reviews.length) % reviews.length);
 
   const at = (offset: number) =>
     reviews[(i + offset + reviews.length) % reviews.length];
@@ -31,8 +36,25 @@ export function ReviewsCarousel({ reviews }: { reviews: Review[] }) {
   ];
 
   return (
-    <div className="relative">
-      <div className="relative h-[380px] md:h-[340px] flex items-center justify-center">
+    <div
+      className="relative"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <div
+        className="relative h-[380px] md:h-[340px] flex items-center justify-center touch-pan-y select-none"
+        onTouchStart={(e) => {
+          touchStartX.current = e.touches[0].clientX;
+          setPaused(true);
+        }}
+        onTouchEnd={(e) => {
+          if (touchStartX.current === null) return;
+          const dx = e.changedTouches[0].clientX - touchStartX.current;
+          if (Math.abs(dx) > 40) (dx < 0 ? next : prev)();
+          touchStartX.current = null;
+          setPaused(false);
+        }}
+      >
         <AnimatePresence initial={false}>
           {positions.map((p) => (
             <motion.a
@@ -66,6 +88,23 @@ export function ReviewsCarousel({ reviews }: { reviews: Review[] }) {
             </motion.a>
           ))}
         </AnimatePresence>
+
+        <button
+          type="button"
+          onClick={prev}
+          aria-label="Reseña anterior"
+          className="hover-glow absolute left-1 md:left-4 z-10 h-11 w-11 rounded-full border border-border bg-card/80 backdrop-blur text-cream hover:text-tomato hover:border-tomato flex items-center justify-center"
+        >
+          <ChevronLeft size={20} />
+        </button>
+        <button
+          type="button"
+          onClick={next}
+          aria-label="Reseña siguiente"
+          className="hover-glow absolute right-1 md:right-4 z-10 h-11 w-11 rounded-full border border-border bg-card/80 backdrop-blur text-cream hover:text-tomato hover:border-tomato flex items-center justify-center"
+        >
+          <ChevronRight size={20} />
+        </button>
       </div>
 
       <div className="mt-6 flex justify-center gap-2">
