@@ -4,20 +4,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/*
- * Design system definition.
- *
- * The @theme inline block maps CSS custom properties to Tailwind utility
- * classes (e.g. --color-primary -> bg-primary, text-primary).
- *
- * The :root and .dark blocks define the actual color values using oklch.
- * All colors MUST use oklch format.
- *
- * To add a new semantic color:
- * 1. Add the variable to :root (light value) and .dark (dark value)
- * 2. Register it in @theme inline as --color-<name>: var(--<name>)
- */
-
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -63,102 +49,76 @@
   --color-tomato: var(--tomato);
   --color-gold: var(--gold);
   --color-charcoal: var(--charcoal);
+  --color-wood: var(--wood);
+  --color-ink: var(--ink);
   --font-display: "Archivo Black", "Impact", sans-serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
   --radius: 0.5rem;
-  --cream: oklch(0.958 0.02 85);
-  --tomato: oklch(0.53 0.17 27);
-  --gold: oklch(0.74 0.14 72);
-  --charcoal: oklch(0.18 0.01 60);
-  --background: var(--cream);
-  --foreground: var(--charcoal);
-  --card: oklch(0.98 0.01 85);
-  --card-foreground: var(--charcoal);
-  --popover: var(--cream);
-  --popover-foreground: var(--charcoal);
+  /* Franky's palette — black walls, walnut wood, brasa-red neon, warm bulbs. */
+  --cream: oklch(0.95 0.02 80);
+  --tomato: oklch(0.55 0.22 27);
+  --gold: oklch(0.78 0.14 70);
+  --wood: oklch(0.44 0.08 55);
+  --charcoal: oklch(0.16 0.006 60);
+  --ink: oklch(0.09 0.005 60);
+  --background: var(--ink);
+  --foreground: var(--cream);
+  --card: oklch(0.15 0.008 40);
+  --card-foreground: var(--cream);
+  --popover: var(--ink);
+  --popover-foreground: var(--cream);
   --primary: var(--tomato);
   --primary-foreground: oklch(0.98 0.01 85);
-  --secondary: var(--gold);
-  --secondary-foreground: var(--charcoal);
-  --muted: oklch(0.92 0.02 80);
-  --muted-foreground: oklch(0.4 0.02 60);
+  --secondary: var(--wood);
+  --secondary-foreground: var(--cream);
+  --muted: oklch(0.22 0.01 50);
+  --muted-foreground: oklch(0.72 0.02 70);
   --accent: var(--gold);
   --accent-foreground: var(--charcoal);
   --destructive: oklch(0.55 0.22 27);
   --destructive-foreground: oklch(0.98 0.01 85);
-  --border: oklch(0.86 0.02 80);
-  --input: oklch(0.86 0.02 80);
+  --border: oklch(0.28 0.015 45);
+  --input: oklch(0.22 0.01 50);
   --ring: var(--tomato);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.129 0.042 264.695);
-  --sidebar-primary: oklch(0.208 0.042 265.755);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.704 0.04 256.788);
-}
-
-.dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
-  --primary: oklch(0.929 0.013 255.508);
-  --primary-foreground: oklch(0.208 0.042 265.755);
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+  --chart-1: oklch(0.55 0.22 27);
+  --chart-2: oklch(0.78 0.14 70);
+  --chart-3: oklch(0.44 0.08 55);
+  --chart-4: oklch(0.35 0.05 40);
+  --chart-5: oklch(0.65 0.15 50);
+  --sidebar: var(--ink);
+  --sidebar-foreground: var(--cream);
+  --sidebar-primary: var(--tomato);
+  --sidebar-primary-foreground: var(--cream);
+  --sidebar-accent: var(--charcoal);
+  --sidebar-accent-foreground: var(--cream);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--tomato);
 }
 
 @layer base {
   * {
     border-color: var(--color-border);
   }
-
+  html { color-scheme: dark; }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(1200px 600px at 80% -10%, oklch(0.22 0.05 30 / 0.5), transparent 60%),
+      radial-gradient(900px 500px at 0% 100%, oklch(0.2 0.04 40 / 0.4), transparent 60%);
+    background-attachment: fixed;
   }
-
   h1, h2, h3, .font-display {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
     line-height: 0.95;
   }
+  ::selection { background: var(--tomato); color: var(--cream); }
 }
 
 @utility container-x {
@@ -168,3 +128,39 @@
   margin-right: auto;
   max-width: 1280px;
 }
+
+@utility hover-lift {
+  transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 300ms cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 300ms ease,
+              background-color 300ms ease;
+  &:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 20px 40px -10px oklch(0.55 0.22 27 / 0.4),
+                0 0 0 1px oklch(0.55 0.22 27 / 0.5);
+  }
+}
+
+@utility hover-glow {
+  transition: transform 250ms ease, box-shadow 250ms ease, filter 250ms ease;
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px -5px oklch(0.55 0.22 27 / 0.5);
+    filter: brightness(1.12);
+  }
+}
+
+@utility wood-grain {
+  background:
+    repeating-linear-gradient(90deg,
+      oklch(0.4 0.08 55) 0px,
+      oklch(0.44 0.08 55) 2px,
+      oklch(0.38 0.07 50) 4px,
+      oklch(0.42 0.08 55) 6px);
+}
+
+@keyframes ember {
+  0%, 100% { opacity: 0.85; filter: drop-shadow(0 0 6px oklch(0.55 0.22 27 / 0.5)); }
+  50%      { opacity: 1;    filter: drop-shadow(0 0 16px oklch(0.55 0.22 27 / 0.75)); }
+}
+.ember { animation: ember 3s ease-in-out infinite; }

@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Reveal } from "@/components/reveal";
-import ingredients from "@/assets/ingredients.jpg";
+import { SocialLinks } from "@/components/social-links";
+import { Flame } from "lucide-react";
 
 export const Route = createFileRoute("/carta")({
   head: () => ({
@@ -56,7 +57,7 @@ const burgers: Item[] = [
     price: "11,55 €",
   },
   {
-    name: "Volcano 🌶️",
+    name: "Volcano",
     desc: "Doble smash de carne de vaca premium, salsa de pimientos rojos y jalapeños, triple cheddar en pan brioche.",
     price: "15,55 €",
     tag: "Picante",
@@ -98,10 +99,10 @@ const beers: Item[] = [
 const categories: Array<{ title: string; items: Item[]; note?: string }> = [
   { title: "Hamburguesas", items: burgers },
   { title: "Combos", items: combos, note: "Precios pendientes de completar con la carta real." },
-  { title: "Para acompañar · Patatas", items: sides, note: "Precios pendientes de completar con la carta real." },
-  { title: "Postres", items: desserts, note: "Precios pendientes de completar con la carta real." },
-  { title: "Bebidas", items: drinks, note: "Precios pendientes de completar con la carta real." },
-  { title: "Cervezas", items: beers, note: "Precios pendientes de completar con la carta real." },
+  { title: "Para acompañar · Patatas", items: sides, note: "Precios pendientes." },
+  { title: "Postres", items: desserts, note: "Precios pendientes." },
+  { title: "Bebidas", items: drinks, note: "Precios pendientes." },
+  { title: "Cervezas", items: beers, note: "Precios pendientes." },
 ];
 
 function CartaPage() {
@@ -110,28 +111,16 @@ function CartaPage() {
       <SiteHeader />
       <main className="pt-24">
         {/* Hero */}
-        <section className="container-x pt-16 pb-24 grid md:grid-cols-12 gap-10 items-end">
-          <div className="md:col-span-8">
-            <p className="uppercase tracking-[0.3em] text-xs font-semibold text-primary mb-4">
-              Carta
-            </p>
-            <h1 className="font-display text-[clamp(3rem,9vw,7rem)] text-charcoal">
-              La carta.
-            </h1>
-            <p className="mt-6 text-lg text-muted-foreground max-w-xl">
-              Todo pasa por la plancha caliente y el pan brioche. Elige tu mordida.
-            </p>
-          </div>
-          <div className="md:col-span-4">
-            <img
-              src={ingredients}
-              alt="Ingredientes de smash burger de Franky's: pan brioche, cheddar, tomate, cebolla caramelizada y lechuga"
-              loading="lazy"
-              width={1408}
-              height={1008}
-              className="w-full h-auto rounded-md object-cover"
-            />
-          </div>
+        <section className="container-x pt-16 pb-24">
+          <p className="uppercase tracking-[0.3em] text-xs font-semibold text-tomato mb-4">
+            Carta
+          </p>
+          <h1 className="font-display text-[clamp(3rem,9vw,7rem)] text-cream">
+            La <span className="text-tomato">carta.</span>
+          </h1>
+          <p className="mt-6 text-lg text-cream/70 max-w-xl">
+            Todo pasa por la plancha caliente y el pan brioche. Elige tu mordida.
+          </p>
         </section>
 
         {/* Categories */}
@@ -139,54 +128,71 @@ function CartaPage() {
           {categories.map((cat) => (
             <section key={cat.title}>
               <Reveal>
-                <div className="flex items-baseline justify-between border-b border-charcoal/20 pb-6 mb-10">
-                  <h2 className="font-display text-4xl md:text-6xl text-charcoal">
+                <div className="flex items-baseline justify-between border-b border-border pb-6 mb-10">
+                  <h2 className="font-display text-4xl md:text-6xl text-cream">
                     {cat.title}
                   </h2>
                   {cat.note && (
-                    <span className="hidden md:inline text-xs uppercase tracking-widest text-muted-foreground">
+                    <span className="hidden md:inline text-xs uppercase tracking-widest text-cream/40">
                       Pendiente
                     </span>
                   )}
                 </div>
               </Reveal>
               {cat.note && (
-                <p className="text-sm text-muted-foreground mb-8 italic">{cat.note}</p>
+                <p className="text-sm text-cream/50 mb-8 italic">{cat.note}</p>
               )}
-              <ul className="grid md:grid-cols-2 gap-x-16 gap-y-8">
+              <ul className="grid md:grid-cols-2 gap-6">
                 {cat.items.map((item) => (
-                  <li key={item.name} className="flex gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-baseline justify-between gap-3">
-                        <h3 className="font-display text-xl md:text-2xl text-charcoal">
-                          {item.name}
-                        </h3>
-                        <span className="flex-1 border-b border-dashed border-charcoal/30 translate-y-[-4px]" />
-                        <span className="font-display text-lg md:text-xl text-tomato whitespace-nowrap">
-                          {item.price ?? "—"}
+                  <li
+                    key={item.name}
+                    className="hover-lift bg-card/70 border border-border rounded-lg p-6 group cursor-default"
+                  >
+                    <div className="flex items-baseline justify-between gap-3">
+                      <h3 className="font-display text-xl md:text-2xl text-cream group-hover:text-tomato transition-colors">
+                        {item.name}
+                        {item.tag === "Picante" && (
+                          <Flame className="inline-block ml-2 text-tomato" size={20} />
+                        )}
+                      </h3>
+                      <span className="flex-1 border-b border-dashed border-cream/20 translate-y-[-4px]" />
+                      <span className="font-display text-lg md:text-xl text-tomato whitespace-nowrap">
+                        {item.price ?? "—"}
+                      </span>
+                    </div>
+                    <p className="mt-2 text-sm text-cream/60 leading-relaxed">
+                      {item.desc}
+                    </p>
+                    <div className="mt-3 flex gap-2 flex-wrap">
+                      {item.tag && (
+                        <span className="inline-block text-[10px] uppercase tracking-widest bg-tomato/20 text-tomato border border-tomato/40 px-2 py-1 rounded-full">
+                          {item.tag}
                         </span>
-                      </div>
-                      <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                        {item.desc}
-                      </p>
-                      <div className="mt-2 flex gap-2 flex-wrap">
-                        {item.tag && (
-                          <span className="inline-block text-[10px] uppercase tracking-widest bg-charcoal text-cream px-2 py-1 rounded-full">
-                            {item.tag}
-                          </span>
-                        )}
-                        {item.placeholder && (
-                          <span className="inline-block text-[10px] uppercase tracking-widest bg-gold/30 text-charcoal px-2 py-1 rounded-full">
-                            Pendiente de precio
-                          </span>
-                        )}
-                      </div>
+                      )}
+                      {item.placeholder && (
+                        <span className="inline-block text-[10px] uppercase tracking-widest bg-gold/15 text-gold border border-gold/30 px-2 py-1 rounded-full">
+                          Pendiente de precio
+                        </span>
+                      )}
                     </div>
                   </li>
                 ))}
               </ul>
             </section>
           ))}
+
+          {/* Social block */}
+          <section className="text-center pt-12">
+            <p className="uppercase tracking-[0.3em] text-xs font-semibold text-tomato mb-4">
+              Síguenos
+            </p>
+            <h2 className="font-display text-3xl md:text-5xl text-cream mb-6">
+              Nos vemos en las redes.
+            </h2>
+            <div className="flex justify-center">
+              <SocialLinks />
+            </div>
+          </section>
         </div>
       </main>
 
@@ -195,7 +201,7 @@ function CartaPage() {
         href="https://www.just-eat.es/restaurants-frankys-burger-a-coruna/menu"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50 bg-primary text-primary-foreground px-5 py-3 rounded-full font-semibold shadow-xl hover:opacity-90 transition-opacity"
+        className="hover-glow fixed bottom-6 right-6 z-50 bg-tomato text-cream px-5 py-3 rounded-full font-semibold shadow-[0_20px_40px_-10px_oklch(0.55_0.22_27/0.5)]"
       >
         Pedir en Just Eat →
       </a>
