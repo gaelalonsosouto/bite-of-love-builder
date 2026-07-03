@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Reveal } from "@/components/reveal";
-import { SocialLinks } from "@/components/social-links";
 import { Flame } from "lucide-react";
 
 export const Route = createFileRoute("/carta")({
@@ -71,38 +70,136 @@ const burgers: Item[] = [
 ];
 
 const combos: Item[] = [
-  { name: "Combo Classic", desc: "Classic Cheeseburger + patatas + bebida.", placeholder: true },
-  { name: "Combo Franky's", desc: "Franky's Burger + patatas + bebida.", placeholder: true },
+  {
+    name: "Menú Popper",
+    desc: "Carne de vaca premium, queso cheddar, tomate, lechuga, cebolla, ketchup y mayonesa en pan brioche con patatas y bebida a elegir.",
+    price: "15,95 €",
+  },
+  {
+    name: "Menú Classic Cheeseburger",
+    desc: "Doble smash de carne de vaca premium, doble queso cheddar, cebolla, pepinillos, ketchup y mostaza en pan brioche con patatas y bebida a elegir.",
+    price: "16,95 €",
+  },
+  {
+    name: "Menú Franky's Burger",
+    desc: "Doble smash de carne de vaca premium, doble queso cheddar, cebolla caramelizada, bacon y salsa Franky's en pan brioche con patatas y bebida a elegir.",
+    price: "18,95 €",
+  },
+  {
+    name: "Menú Crispy Chicken Burger",
+    desc: "Pollo crujiente, tomate, lechuga, cebolla, ketchup y mayonesa en pan brioche con patatas y bebida a elegir.",
+    price: "16,95 €",
+  },
+  {
+    name: "Menú Volcano",
+    desc: "Doble smash de carne de vaca premium, salsa de pimientos rojos y jalapeños, triple cheddar en pan brioche con patatas y bebida a elegir.",
+    price: "21,55 €",
+    tag: "Picante",
+  },
+  {
+    name: "Menú Monster",
+    desc: "Triple smash de carne de vaca premium, triple queso cheddar, cebolla estilo Oklahoma y salsa Monster en pan brioche con patatas y bebida a elegir.",
+    price: "22,95 €",
+  },
+  {
+    name: "Menú Familiar Classic Cheese",
+    desc: "4 Classic Cheese semi-smash de vaca premium, cheddar, cebolla, pepinillos, ketchup y mostaza en pan brioche, con 4 raciones de patatas pequeñas crujientes.",
+    price: "49,95 €",
+    tag: "Para compartir",
+  },
 ];
 
 const sides: Item[] = [
-  { name: "Patatas fritas caseras", desc: "Corte grueso, dorado por fuera, esponjoso por dentro.", placeholder: true },
-  { name: "Patatas Franky's", desc: "Con queso fundido, bacon y salsa de la casa.", placeholder: true },
-  { name: "Aros de cebolla", desc: "Rebozados y crujientes.", placeholder: true },
+  {
+    name: "Tiras de Pollo",
+    desc: "6 tiras de solomillo de pollo empanadas, tiernas y crujientes, con salsa BBQ.",
+    price: "10,95 €",
+  },
+  {
+    name: "Aros de Cebolla",
+    desc: "8 aros rebozados en panko crujiente, acompañados de salsa BBQ.",
+    price: "6,95 €",
+  },
+  {
+    name: "Palitos de Mozzarella",
+    desc: "6 palitos crujientes por fuera y fundidos por dentro, acompañados de salsa marinara.",
+    price: "7,55 €",
+  },
+  {
+    name: "Crispy Mix",
+    desc: "3 tiras de pollo crocante, 3 palitos de mozzarella y 4 aros de cebolla en panko, con salsa BBQ y marinara.",
+    price: "12,95 €",
+  },
+];
+
+const potatoes: Item[] = [
+  { name: "Patatas Pequeñas", desc: "Patatas fritas de corte fino y crujiente.", price: "3,50 €" },
+  { name: "Patatas Grandes", desc: "Patatas fritas de corte fino y crujiente.", price: "3,90 €" },
+  {
+    name: "Patatas con Queso",
+    desc: "Patatas fritas de corte fino y crujiente, bañadas en queso cheddar fundido.",
+    price: "4,50 €",
+  },
+  {
+    name: "Patatas con Queso y Bacon",
+    desc: "Patatas fritas de corte fino y crujiente, bañadas en queso cheddar fundido y crispy bacon.",
+    price: "5,50 €",
+  },
 ];
 
 const desserts: Item[] = [
-  { name: "Brownie casero", desc: "Chocolate intenso, tibio, con nueces.", placeholder: true },
-  { name: "Cheesecake NY", desc: "Estilo Nueva York, cremoso y denso.", placeholder: true },
+  {
+    name: "New York Cheesecake",
+    desc: "Tarta de queso estilo New York sobre base de galleta, bañada en salsa de frutos rojos.",
+    price: "5,50 €",
+  },
 ];
 
 const drinks: Item[] = [
-  { name: "Refrescos", desc: "Coca-Cola, Fanta, Aquarius, agua.", placeholder: true },
-  { name: "Batidos", desc: "Vainilla, chocolate, fresa.", placeholder: true },
+  { name: "Coca-Cola (330 ml)", desc: "Clásica bien fría.", price: "2,80 €" },
+  { name: "Coca-Cola Zero (330 ml)", desc: "Sin azúcar.", price: "2,80 €" },
+  { name: "Coca-Cola Zero Zero (330 ml)", desc: "Sin azúcar y sin cafeína.", price: "2,80 €" },
+  { name: "Fanta Naranja (330 ml)", desc: "Refresco con burbujas de naranja.", price: "2,80 €" },
+  { name: "Aquarius Limón (330 ml)", desc: "Refresco de limón.", price: "2,80 €" },
+  { name: "Aquarius Naranja (330 ml)", desc: "Refresco de naranja.", price: "2,80 €" },
+  { name: "Fuze Tea Limón (330 ml)", desc: "Té frío con toque de limón.", price: "2,80 €" },
+  { name: "Agua Cabreiroá (500 ml)", desc: "Agua mineral natural gallega.", price: "2,00 €" },
+  { name: "Agua Cabreiroá con gas (500 ml)", desc: "Agua mineral con gas.", price: "2,50 €" },
 ];
 
 const beers: Item[] = [
-  { name: "Estrella Galicia 1906", desc: "La reserva especial. Bien fría, para acompañar la smash.", placeholder: true },
-  { name: "Estrella Galicia", desc: "La clásica de la casa.", placeholder: true },
+  {
+    name: "Estrella Galicia (330 ml)",
+    desc: "La clásica gallega. Venta prohibida a menores de 18 años.",
+    price: "2,90 €",
+    tag: "18+",
+  },
+  {
+    name: "1906 Reserva Especial (330 ml)",
+    desc: "Cerveza reserva de Estrella Galicia. Venta prohibida a menores de 18 años.",
+    price: "2,90 €",
+    tag: "18+",
+  },
+  {
+    name: "Estrella Galicia 0,0 (330 ml)",
+    desc: "Sin alcohol.",
+    price: "2,90 €",
+  },
+  {
+    name: "Tostada 0,0 (330 ml)",
+    desc: "Cerveza tostada sin alcohol.",
+    price: "2,90 €",
+  },
 ];
 
 const categories: Array<{ title: string; items: Item[]; note?: string }> = [
   { title: "Hamburguesas", items: burgers },
-  { title: "Combos", items: combos, note: "Precios pendientes de completar con la carta real." },
-  { title: "Para acompañar · Patatas", items: sides, note: "Precios pendientes." },
-  { title: "Postres", items: desserts, note: "Precios pendientes." },
-  { title: "Bebidas", items: drinks, note: "Precios pendientes." },
-  { title: "Cervezas", items: beers, note: "Precios pendientes." },
+  { title: "Combos", items: combos, note: "Todos los menús incluyen patatas y bebida a elegir." },
+  { title: "Para acompañar", items: sides },
+  { title: "Patatas", items: potatoes },
+  { title: "Postres", items: desserts },
+  { title: "Bebidas", items: drinks },
+  { title: "Cervezas", items: beers, note: "Venta de bebidas alcohólicas restringida a mayores de 18 años." },
 ];
 
 function CartaPage() {
@@ -180,19 +277,6 @@ function CartaPage() {
               </ul>
             </section>
           ))}
-
-          {/* Social block */}
-          <section className="text-center pt-12">
-            <p className="uppercase tracking-[0.3em] text-xs font-semibold text-tomato mb-4">
-              Síguenos
-            </p>
-            <h2 className="font-display text-3xl md:text-5xl text-cream mb-6">
-              Nos vemos en las redes.
-            </h2>
-            <div className="flex justify-center">
-              <SocialLinks />
-            </div>
-          </section>
         </div>
       </main>
 
