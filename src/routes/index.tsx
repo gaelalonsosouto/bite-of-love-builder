@@ -249,12 +249,6 @@ function Index() {
                     +34 881 33 69 26
                   </a>
                 </div>
-                <div className="mt-8">
-                  <p className="uppercase tracking-[0.3em] text-xs font-semibold text-cream/50 mb-3">
-                    Síguenos
-                  </p>
-                  <SocialLinks />
-                </div>
               </div>
             </Reveal>
 
