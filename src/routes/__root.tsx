@@ -77,14 +77,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Franky's Burger A Coruña | Smash Burgers cerca de Riazor" },
+      { name: "description", content: "Smash burgers de vaca madurada premium en A Coruña, a un paso de la playa de Riazor. Muerde el amor." },
+      { name: "author", content: "Franky's Burger" },
+      { property: "og:title", content: "Franky's Burger A Coruña | Smash Burgers cerca de Riazor" },
+      { property: "og:description", content: "Smash burgers de vaca madurada premium en A Coruña, junto a la playa de Riazor." },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Franky's Burger" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
@@ -92,6 +92,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&display=swap",
+      },
     ],
   }),
   shellComponent: RootShell,
