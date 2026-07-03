@@ -221,8 +221,8 @@ function Index() {
         <section className="container-x pb-24 md:pb-32">
           <Reveal>
             <div className="hover-lift relative overflow-hidden bg-gradient-to-br from-tomato/20 via-card to-card border border-tomato/30 rounded-2xl p-12 md:p-20 text-center">
-              <p className="font-display text-[clamp(1.75rem,3.5vw,3rem)] text-cream leading-tight max-w-3xl mx-auto">
-                Smash burgers de <span className="text-tomato">vaca madurada premium.</span> Pan brioche, salsas de casa, plancha al rojo. Hechas a mano, mordidas con las dos manos.
+              <p className="font-display text-[clamp(1.75rem,3.5vw,3rem)] text-cream leading-tight max-w-3xl mx-auto uppercase tracking-wider">
+                ¿Tienes Hambre?
               </p>
               <div className="mt-8 flex flex-wrap gap-3 justify-center">
                 <Link
