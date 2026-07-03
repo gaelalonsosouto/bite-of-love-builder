@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import type { ReactElement } from "react";
 import { motion, useScroll, useTransform, useReducedMotion, type MotionValue } from "motion/react";
 
 /**
@@ -85,7 +86,7 @@ function BurgerStack({ progress }: { progress: MotionValue<number> | null }) {
   // Layers ordered top → bottom visually. Each has its own drift, rotation, and drop.
   const layers: Array<{
     key: string;
-    el: () => JSX.Element;
+    el: () => ReactElement;
     y: [number, number];
     rot: [number, number];
     x: [number, number];
