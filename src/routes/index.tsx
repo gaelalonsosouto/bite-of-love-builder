@@ -5,7 +5,6 @@ import { SiteFooter } from "@/components/site-footer";
 import { ScrollBurger } from "@/components/scroll-burger";
 import { Reveal } from "@/components/reveal";
 import { ReviewsCarousel, type Review } from "@/components/reviews-carousel";
-import { SocialLinks } from "@/components/social-links";
 import interior from "@/assets/frankys-interior.webp.asset.json";
 import facade from "@/assets/frankys-facade.webp.asset.json";
 
@@ -79,10 +78,7 @@ function Index() {
                 Muerde<br />
                 <span className="text-tomato">el amor.</span>
               </h1>
-              <p className="mt-6 text-lg text-cream/70 max-w-md">
-                Smash burgers de vaca madurada premium. Pan brioche, salsas de casa, plancha al rojo. Hechas a mano, mordidas con las dos manos.
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
+              <div className="mt-10 flex flex-wrap gap-3">
                 <Link
                   to="/carta"
                   className="hover-glow inline-flex items-center gap-2 bg-tomato text-cream px-6 py-3 rounded-full font-semibold"
