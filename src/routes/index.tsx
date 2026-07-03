@@ -217,6 +217,33 @@ function Index() {
           </div>
         </section>
 
+        {/* PITCH / SLOGAN */}
+        <section className="container-x pb-24 md:pb-32">
+          <Reveal>
+            <div className="hover-lift relative overflow-hidden bg-gradient-to-br from-tomato/20 via-card to-card border border-tomato/30 rounded-2xl p-12 md:p-20 text-center">
+              <p className="font-display text-[clamp(1.75rem,3.5vw,3rem)] text-cream leading-tight max-w-3xl mx-auto">
+                Smash burgers de <span className="text-tomato">vaca madurada premium.</span> Pan brioche, salsas de casa, plancha al rojo. Hechas a mano, mordidas con las dos manos.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3 justify-center">
+                <Link
+                  to="/carta"
+                  className="hover-glow inline-flex items-center bg-tomato text-cream px-6 py-3 rounded-full font-semibold"
+                >
+                  Ver la carta →
+                </Link>
+                <a
+                  href="https://www.just-eat.es/restaurants-frankys-burger-a-coruna/menu"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover-lift inline-flex items-center border-2 border-cream/40 text-cream px-6 py-3 rounded-full font-semibold"
+                >
+                  Pedir a domicilio
+                </a>
+              </div>
+            </div>
+          </Reveal>
+        </section>
+
         {/* LOCATION */}
         <section className="py-32 md:py-40">
           <div className="container-x grid md:grid-cols-2 gap-16 items-start">
@@ -285,36 +312,6 @@ function Index() {
               </div>
             </Reveal>
           </div>
-        </section>
-
-        {/* CTA */}
-        <section className="container-x pb-32">
-          <Reveal>
-            <div className="hover-lift relative overflow-hidden bg-gradient-to-br from-tomato/20 via-card to-card border border-tomato/30 rounded-2xl p-12 md:p-20 text-center">
-              <h2 className="font-display text-[clamp(2.5rem,7vw,6rem)] text-cream">
-                ¿Tienes hambre?
-              </h2>
-              <p className="mt-4 text-cream/70 max-w-xl mx-auto">
-                La carta completa te espera. Y si no puedes acercarte, te la llevamos.
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3 justify-center">
-                <Link
-                  to="/carta"
-                  className="hover-glow inline-flex items-center bg-tomato text-cream px-6 py-3 rounded-full font-semibold"
-                >
-                  Ver la carta →
-                </Link>
-                <a
-                  href="https://www.just-eat.es/restaurants-frankys-burger-a-coruna/menu"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover-lift inline-flex items-center border-2 border-cream/40 text-cream px-6 py-3 rounded-full font-semibold"
-                >
-                  Pedir en Just Eat
-                </a>
-              </div>
-            </div>
-          </Reveal>
         </section>
       </main>
       <SiteFooter />
