@@ -83,7 +83,13 @@ export function BurgerHero() {
 
 function BurgerStack({ progress }: { progress: MotionValue<number> | null }) {
   // Layers ordered top → bottom visually. Each has its own drift, rotation, and drop.
-  const layers = [
+  const layers: Array<{
+    key: string;
+    el: () => JSX.Element;
+    y: [number, number];
+    rot: [number, number];
+    x: [number, number];
+  }> = [
     { key: "topBun", el: TopBun, y: [-180, -20], rot: [0, -8], x: [0, 40] },
     { key: "lettuce", el: Lettuce, y: [-110, 40], rot: [0, 6], x: [0, -35] },
     { key: "tomato", el: Tomato, y: [-60, 90], rot: [0, -4], x: [0, 30] },
@@ -94,11 +100,21 @@ function BurgerStack({ progress }: { progress: MotionValue<number> | null }) {
 
   return (
     <div className="relative w-[280px] md:w-[380px] h-full">
-      {layers.map((l, i) => (
-        <BurgerLayer key={l.key} progress={progress} index={i} {...l}>
-          <l.el />
-        </BurgerLayer>
-      ))}
+      {layers.map((l, i) => {
+        const Layer = l.el;
+        return (
+          <BurgerLayer
+            key={l.key}
+            progress={progress}
+            index={i}
+            y={l.y}
+            rot={l.rot}
+            x={l.x}
+          >
+            <Layer />
+          </BurgerLayer>
+        );
+      })}
       {/* plate shadow */}
       <div className="absolute left-1/2 bottom-6 -translate-x-1/2 w-[70%] h-6 rounded-[50%] bg-charcoal/20 blur-xl" />
     </div>
