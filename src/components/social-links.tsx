@@ -1,4 +1,4 @@
-import { Instagram, Facebook, Music2 } from "lucide-react";
+import { Instagram, Facebook } from "lucide-react";
 import type { SVGProps } from "react";
 
 function XIcon(props: SVGProps<SVGSVGElement>) {
@@ -9,10 +9,10 @@ function XIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-function JustEatIcon(props: SVGProps<SVGSVGElement>) {
+function TikTokIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>
-      <path d="M12 2C6.48 2 2 6.03 2 11c0 3.86 2.7 7.15 6.5 8.36V22l3.1-2.05c.13.01.26.01.4.01 5.52 0 10-4.03 10-9S17.52 2 12 2zm-3.5 8.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5S7 12.83 7 12s.67-1.5 1.5-1.5zm7 0c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5S14 12.83 14 12s.67-1.5 1.5-1.5z" />
+      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43V9.24a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.84-.66z" />
     </svg>
   );
 }
@@ -21,8 +21,7 @@ const links = [
   { href: "https://www.instagram.com/frankysburgeroficial", label: "Instagram", Icon: Instagram },
   { href: "https://www.facebook.com/frankysburgercoruna", label: "Facebook", Icon: Facebook },
   { href: "https://x.com/frankysburger", label: "X (Twitter)", Icon: XIcon },
-  { href: "https://www.tiktok.com/@frankysburger", label: "TikTok", Icon: Music2 },
-  { href: "https://www.just-eat.es/restaurants-frankys-burger-a-coruna/menu", label: "Just Eat", Icon: JustEatIcon },
+  { href: "https://www.tiktok.com/@frankysburger", label: "TikTok", Icon: TikTokIcon },
 ];
 
 export function SocialLinks({ className = "" }: { className?: string }) {
