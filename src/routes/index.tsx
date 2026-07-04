@@ -87,92 +87,6 @@ function Index() {
           </div>
         </section>
 
-        {/* STORY */}
-        <section className="py-32 md:py-48">
-          <div className="container-x grid md:grid-cols-12 gap-12 items-center">
-            <div className="md:col-span-5">
-              <Reveal>
-                <div className="hover-lift rounded-lg overflow-hidden border border-border">
-                  <img
-                    src={historiaImg}
-                    alt="Fachada de Franky's Burger en A Coruña con Fran y Alejandra en la puerta"
-                    loading="lazy"
-                    className="w-full h-auto object-cover"
-                  />
-                </div>
-              </Reveal>
-            </div>
-            <div className="md:col-span-7 md:pl-8">
-              <div className="uppercase tracking-[0.3em] text-xs font-semibold text-tomato mb-6">
-                {t(bloques, "historia_kicker", "Nuestra historia")}
-              </div>
-              <Reveal>
-                <h2 className="font-display text-[clamp(2.5rem,6vw,5rem)] text-cream">
-                  {t(bloques, "historia_titulo_1", "De Cali a Nueva York.")}<br />
-                  <span className="text-tomato">{t(bloques, "historia_titulo_2", "De Nueva York a Riazor.")}</span>
-                </h2>
-              </Reveal>
-              <Reveal delay={0.1}>
-                <p className="mt-8 text-lg text-cream/70 max-w-xl">
-                  {t(bloques, "historia_parrafo_1")}
-                </p>
-              </Reveal>
-              <Reveal delay={0.2}>
-                <p className="mt-6 text-lg text-cream/70 max-w-xl">
-                  {t(bloques, "historia_parrafo_2")}
-                </p>
-              </Reveal>
-              <Reveal delay={0.3}>
-                <p className="mt-8 font-display text-2xl text-tomato">
-                  &ldquo;{t(bloques, "historia_frase_final", "Muerde el amor.")}&rdquo;
-                </p>
-              </Reveal>
-            </div>
-          </div>
-        </section>
-
-        {/* PROCESS */}
-        <section className="relative py-32 md:py-40">
-          <div className="absolute inset-0 -z-0 overflow-hidden">
-            <img
-              src={comoImg}
-              alt=""
-              aria-hidden
-              className="w-full h-full object-cover opacity-25"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-ink via-ink/70 to-ink" />
-          </div>
-          <div className="container-x relative">
-            <Reveal>
-              <p className="uppercase tracking-[0.3em] text-xs font-semibold text-gold mb-6">
-                {t(bloques, "como_kicker", "Cómo lo hacemos")}
-              </p>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <h2 className="font-display text-[clamp(2.5rem,8vw,7rem)] max-w-5xl text-cream">
-                {t(bloques, "como_titulo_1", "Vaca madurada.")}<br />
-                {t(bloques, "como_titulo_2", "Plancha al rojo.")}<br />
-                <span className="text-tomato">{t(bloques, "como_titulo_3", "Pan brioche recién tostado.")}</span>
-              </h2>
-            </Reveal>
-            <div className="grid md:grid-cols-3 gap-6 mt-20">
-              {[
-                { t: t(bloques, "como_tarjeta_1_titulo", "Smash de verdad"), d: t(bloques, "como_tarjeta_1_texto", "") },
-                { t: t(bloques, "como_tarjeta_2_titulo", "Salsas de casa"), d: t(bloques, "como_tarjeta_2_texto", "") },
-                { t: t(bloques, "como_tarjeta_3_titulo", "Barra y mesa"), d: t(bloques, "como_tarjeta_3_texto", "") },
-              ].map((f, k) => (
-                <Reveal key={f.t} delay={0.1 * k}>
-                  <div className="hover-lift h-full rounded-lg border border-border bg-card/80 backdrop-blur p-8">
-                    <div className="font-display text-2xl text-gold mb-3">0{k + 1}</div>
-                    <h3 className="font-display text-2xl mb-2 text-cream">{f.t}</h3>
-                    <p className="text-sm text-cream/70 leading-relaxed">{f.d}</p>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* REVIEWS */}
         <section className="py-32 md:py-48">
           <div className="container-x">
@@ -218,6 +132,92 @@ function Index() {
                 </span>
               </a>
             </Reveal>
+          </div>
+        </section>
+
+        {/* PROCESS */}
+        <section className="relative py-32 md:py-40">
+          <div className="absolute inset-0 -z-0 overflow-hidden">
+            <img
+              src={comoImg}
+              alt=""
+              aria-hidden
+              className="w-full h-full object-cover opacity-25"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-ink via-ink/70 to-ink" />
+          </div>
+          <div className="container-x relative">
+            <Reveal>
+              <p className="uppercase tracking-[0.3em] text-xs font-semibold text-gold mb-6">
+                {t(bloques, "como_kicker", "Cómo lo hacemos")}
+              </p>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <h2 className="font-display text-[clamp(2.5rem,8vw,7rem)] max-w-5xl text-cream">
+                {t(bloques, "como_titulo_1", "Vaca madurada.")}<br />
+                {t(bloques, "como_titulo_2", "Plancha al rojo.")}<br />
+                <span className="text-tomato">{t(bloques, "como_titulo_3", "Pan brioche recién tostado.")}</span>
+              </h2>
+            </Reveal>
+            <div className="grid md:grid-cols-3 gap-6 mt-20">
+              {[
+                { t: t(bloques, "como_tarjeta_1_titulo", "Smash de verdad"), d: t(bloques, "como_tarjeta_1_texto", "") },
+                { t: t(bloques, "como_tarjeta_2_titulo", "Salsas de casa"), d: t(bloques, "como_tarjeta_2_texto", "") },
+                { t: t(bloques, "como_tarjeta_3_titulo", "Barra y mesa"), d: t(bloques, "como_tarjeta_3_texto", "") },
+              ].map((f, k) => (
+                <Reveal key={f.t} delay={0.1 * k}>
+                  <div className="hover-lift h-full rounded-lg border border-border bg-card/80 backdrop-blur p-8">
+                    <div className="font-display text-2xl text-gold mb-3">0{k + 1}</div>
+                    <h3 className="font-display text-2xl mb-2 text-cream">{f.t}</h3>
+                    <p className="text-sm text-cream/70 leading-relaxed">{f.d}</p>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* STORY */}
+        <section className="py-32 md:py-48">
+          <div className="container-x grid md:grid-cols-12 gap-12 items-center">
+            <div className="md:col-span-5">
+              <Reveal>
+                <div className="hover-lift rounded-lg overflow-hidden border border-border">
+                  <img
+                    src={historiaImg}
+                    alt="Fachada de Franky's Burger en A Coruña con Fran y Alejandra en la puerta"
+                    loading="lazy"
+                    className="w-full h-auto object-cover"
+                  />
+                </div>
+              </Reveal>
+            </div>
+            <div className="md:col-span-7 md:pl-8">
+              <div className="uppercase tracking-[0.3em] text-xs font-semibold text-tomato mb-6">
+                {t(bloques, "historia_kicker", "Nuestra historia")}
+              </div>
+              <Reveal>
+                <h2 className="font-display text-[clamp(2.5rem,6vw,5rem)] text-cream">
+                  {t(bloques, "historia_titulo_1", "De Cali a Nueva York.")}<br />
+                  <span className="text-tomato">{t(bloques, "historia_titulo_2", "De Nueva York a Riazor.")}</span>
+                </h2>
+              </Reveal>
+              <Reveal delay={0.1}>
+                <p className="mt-8 text-lg text-cream/70 max-w-xl">
+                  {t(bloques, "historia_parrafo_1")}
+                </p>
+              </Reveal>
+              <Reveal delay={0.2}>
+                <p className="mt-6 text-lg text-cream/70 max-w-xl">
+                  {t(bloques, "historia_parrafo_2")}
+                </p>
+              </Reveal>
+              <Reveal delay={0.3}>
+                <p className="mt-8 font-display text-2xl text-tomato">
+                  &ldquo;{t(bloques, "historia_frase_final", "Muerde el amor.")}&rdquo;
+                </p>
+              </Reveal>
+            </div>
           </div>
         </section>
 
