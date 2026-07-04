@@ -284,7 +284,7 @@ function Index() {
                   ))}
                 </dl>
                 <p className="mt-6 text-xs text-cream/50">
-                  Nota: el horario del martes es amplio. Confírmalo por teléfono antes de tu visita.
+                  Horario actualizado. Si vienes en un día festivo, confírmalo por teléfono.
                 </p>
               </div>
             </Reveal>
