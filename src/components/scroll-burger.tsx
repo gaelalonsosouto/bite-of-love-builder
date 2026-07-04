@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
-import { useReducedMotion } from "motion/react";
+import { useEffect, useMemo, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
 import { useLocation } from "@tanstack/react-router";
 import burgerAsset from "@/assets/smash-burger.png.asset.json";
 
 /**
- * Fixed 3D-rotating burger that spins in place as the user scrolls, inspired
- * by the Black Cube website's rotating hero object. Perspective + rotateY +
- * rotateX + rotateZ give a coin-like tumble; no longer falls down the page.
+ * Fixed burger that drops in from above with an elegant framer-motion spring
+ * bounce, sits with a soft blurred backdrop and floating sparkle particles,
+ * and rotates counterclockwise as the user scrolls.
  */
 const BURGER_URL = burgerAsset.url;
 
@@ -14,8 +14,6 @@ export function ScrollBurger() {
   const reduce = useReducedMotion();
   const [progress, setProgress] = useState(0);
   const location = useLocation();
-  // Re-key on every navigation to /, so the fall-in replays every time the
-  // user lands on or returns to the home page.
   const [entryKey, setEntryKey] = useState(0);
   useEffect(() => {
     if (location.pathname === "/") setEntryKey((k) => k + 1);
@@ -43,19 +41,27 @@ export function ScrollBurger() {
     };
   }, [reduce]);
 
-  // 2D rotation only — counterclockwise as the user scrolls. No perspective
-  // distortion so the burger keeps its shape.
-  // Start tilted at -25° from vertical (a bit to the left of the normal) and
-  // rotate counterclockwise as the user scrolls.
   const rotZ = -25 - progress * 540;
   const scale = 0.9 + Math.sin(progress * Math.PI) * 0.15;
+
+  const particles = useMemo(
+    () =>
+      Array.from({ length: 14 }).map((_, i) => ({
+        id: i,
+        x: (Math.random() - 0.5) * 380,
+        y: (Math.random() - 0.5) * 380,
+        size: 2 + Math.random() * 4,
+        delay: Math.random() * 3,
+        duration: 4 + Math.random() * 4,
+      })),
+    [],
+  );
 
   return (
     <div
       aria-hidden
       className="pointer-events-none fixed inset-0 -z-0 overflow-hidden"
     >
-      {/* brasa halo that pulses with the burger */}
       <div
         className="absolute top-1/2 right-[-10%] w-[60vw] h-[60vw] -translate-y-1/2 rounded-full blur-3xl opacity-40"
         style={{
@@ -63,10 +69,62 @@ export function ScrollBurger() {
             "radial-gradient(circle, oklch(0.6 0.22 30 / 0.55), transparent 60%)",
         }}
       />
-      <div
+      <motion.div
         key={entryKey}
-        className="absolute top-1/2 right-[8%] md:right-[12%] w-[70vw] max-w-[460px] md:w-[36vw] md:max-w-[560px] burger-drop-in"
+        initial={reduce ? false : { y: "-120vh", opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={
+          reduce
+            ? { duration: 0 }
+            : {
+                type: "spring",
+                stiffness: 90,
+                damping: 11,
+                mass: 1.2,
+                delay: 0.25,
+              }
+        }
+        className="absolute top-1/2 right-[8%] md:right-[12%] w-[70vw] max-w-[460px] md:w-[36vw] md:max-w-[560px]"
       >
+        <div
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[130%] rounded-full"
+          style={{
+            background:
+              "radial-gradient(circle, oklch(0.55 0.22 30 / 0.35) 0%, oklch(0.55 0.22 30 / 0.12) 40%, transparent 70%)",
+            filter: "blur(40px)",
+          }}
+        />
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full">
+          {particles.map((p) => (
+            <motion.span
+              key={p.id}
+              className="absolute left-1/2 top-1/2 rounded-full"
+              style={{
+                width: p.size,
+                height: p.size,
+                background:
+                  "radial-gradient(circle, oklch(0.98 0.12 90 / 0.95), oklch(0.8 0.2 55 / 0) 70%)",
+                boxShadow: "0 0 8px oklch(0.9 0.2 70 / 0.9)",
+              }}
+              animate={
+                reduce
+                  ? undefined
+                  : {
+                      x: [p.x - 20, p.x + 20, p.x - 20],
+                      y: [p.y + 20, p.y - 20, p.y + 20],
+                      opacity: [0, 1, 0],
+                      scale: [0.6, 1.1, 0.6],
+                    }
+              }
+              transition={{
+                duration: p.duration,
+                delay: p.delay,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+          ))}
+        </div>
         <img
           src={BURGER_URL}
           alt=""
@@ -76,10 +134,9 @@ export function ScrollBurger() {
             filter:
               "drop-shadow(0 40px 60px oklch(0 0 0 / 0.8)) drop-shadow(0 0 80px oklch(0.6 0.24 45 / 0.35))",
           }}
-          className="block w-full"
+          className="block w-full relative"
         />
-      </div>
-      {/* vignette to keep contrast for content */}
+      </motion.div>
       <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/70 to-transparent md:via-ink/40" />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ink/80" />
     </div>
