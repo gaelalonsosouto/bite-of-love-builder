@@ -45,7 +45,9 @@ export function ScrollBurger() {
 
   // 2D rotation only — counterclockwise as the user scrolls. No perspective
   // distortion so the burger keeps its shape.
-  const rotZ = -progress * 540; // 1.5 turns counterclockwise
+  // Start tilted at -25° from vertical (a bit to the left of the normal) and
+  // rotate counterclockwise as the user scrolls.
+  const rotZ = -25 - progress * 540;
   const scale = 0.9 + Math.sin(progress * Math.PI) * 0.15;
 
   return (
