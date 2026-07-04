@@ -1,32 +1,37 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { Star } from "lucide-react";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ScrollBurger } from "@/components/scroll-burger";
 import { Reveal } from "@/components/reveal";
 import interior from "@/assets/frankys-interior.webp.asset.json";
 import facade from "@/assets/frankys-facade.webp.asset.json";
+import { bloquesQueryOptions, horarioQueryOptions, t } from "@/lib/content";
 
 const MAPS_URL =
   "https://www.google.com/maps/place/Franky's+Burger/@43.3545007,-9.0264456,9z/data=!4m10!1m2!2m1!1zZnJhbmvCtHlz!3m6!1s0xd2e7dae90f2d35d:0x74c8b3b9419d6322!8m2!3d43.3677895!4d-8.4122959!15sCglmcmFua8K0eXNaCiIIZnJhbmsgeXOSARRoYW1idXJnZXJfcmVzdGF1cmFudOABAA!16s%2Fg%2F11wwtz7ghb?entry=ttu";
 const MAPS_REVIEWS_URL = MAPS_URL;
 
 export const Route = createFileRoute("/")({
+  loader: ({ context }) => {
+    context.queryClient.ensureQueryData(bloquesQueryOptions);
+    context.queryClient.ensureQueryData(horarioQueryOptions);
+  },
   component: Index,
+  errorComponent: ({ error }) => (
+    <div className="min-h-screen flex items-center justify-center text-cream p-8">
+      {error.message}
+    </div>
+  ),
 });
 
-const schedule = [
-  ["Lunes", "Cerrado"],
-  ["Martes", "20:00 – 00:00"],
-  ["Miércoles", "13:30 – 6:00 y 20:00 – 23:00"],
-  ["Jueves", "13:30 – 16:00 y 20:00 – 23:00"],
-  ["Viernes", "13:30 – 16:00 y 20:00 – 00:00"],
-  ["Sábado", "13:30 – 16:00 y 20:00 – 00:00"],
-  ["Domingo", "13:30 – 23:00 (horario continuo)"],
-];
-
 function Index() {
+  const { data: bloques } = useSuspenseQuery(bloquesQueryOptions);
+  const { data: schedule } = useSuspenseQuery(horarioQueryOptions);
+  const historiaImg = bloques.get("historia_imagen")?.valor || facade.url;
+  const comoImg = bloques.get("como_imagen_fondo")?.valor || interior.url;
   return (
     <div className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
       <ScrollBurger />
@@ -43,18 +48,18 @@ function Index() {
             >
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-tomato/40 bg-tomato/10 text-tomato text-xs uppercase tracking-[0.3em] font-semibold ember">
                 <span className="h-1.5 w-1.5 rounded-full bg-tomato" />
-                A Coruña · Riazor
+                {t(bloques, "hero_badge", "A Coruña · Riazor")}
               </div>
               <h1 className="mt-6 font-display text-[clamp(3.5rem,10vw,8rem)] text-cream leading-[0.85]">
-                Muerde<br />
-                <span className="text-tomato">el amor.</span>
+                {t(bloques, "hero_titulo_1", "Muerde")}<br />
+                <span className="text-tomato">{t(bloques, "hero_titulo_2", "el amor.")}</span>
               </h1>
               <div className="mt-10 flex flex-wrap gap-3">
                 <Link
                   to="/carta"
                   className="hover-glow inline-flex items-center gap-2 bg-tomato text-cream px-6 py-3 rounded-full font-semibold"
                 >
-                  Ver la carta →
+                  {t(bloques, "hero_cta_primario", "Ver la carta →")}
                 </Link>
                 <a
                   href="https://www.just-eat.es/restaurants-frankys-burger-a-coruna/menu"
@@ -62,12 +67,12 @@ function Index() {
                   rel="noopener noreferrer"
                   className="hover-lift inline-flex items-center border-2 border-cream/30 text-cream px-6 py-3 rounded-full font-semibold"
                 >
-                  Pedir a domicilio
+                  {t(bloques, "hero_cta_secundario", "Pedir a domicilio")}
                 </a>
               </div>
               <div className="mt-10 flex items-center gap-3 text-sm">
-                <span className="text-gold text-lg tracking-widest">★★★★★</span>
-                <span className="text-cream/60">5,0 · 558 reseñas en Google</span>
+                <span className="text-gold text-lg tracking-widest">{t(bloques, "hero_valoracion_estrellas", "★★★★★")}</span>
+                <span className="text-cream/60">{t(bloques, "hero_valoracion_texto", "5,0 · 558 reseñas en Google")}</span>
               </div>
             </motion.div>
           </div>
@@ -80,7 +85,7 @@ function Index() {
               <Reveal>
                 <div className="hover-lift rounded-lg overflow-hidden border border-border">
                   <img
-                    src={facade.url}
+                    src={historiaImg}
                     alt="Fachada de Franky's Burger en A Coruña con Fran y Alejandra en la puerta"
                     loading="lazy"
                     className="w-full h-auto object-cover"
@@ -90,27 +95,27 @@ function Index() {
             </div>
             <div className="md:col-span-7 md:pl-8">
               <div className="uppercase tracking-[0.3em] text-xs font-semibold text-tomato mb-6">
-                Nuestra historia
+                {t(bloques, "historia_kicker", "Nuestra historia")}
               </div>
               <Reveal>
                 <h2 className="font-display text-[clamp(2.5rem,6vw,5rem)] text-cream">
-                  De Cali a Nueva York.<br />
-                  <span className="text-tomato">De Nueva York a Riazor.</span>
+                  {t(bloques, "historia_titulo_1", "De Cali a Nueva York.")}<br />
+                  <span className="text-tomato">{t(bloques, "historia_titulo_2", "De Nueva York a Riazor.")}</span>
                 </h2>
               </Reveal>
               <Reveal delay={0.1}>
                 <p className="mt-8 text-lg text-cream/70 max-w-xl">
-                  Fran Rodríguez creció entre las cocinas de Cali y las planchas de los steakhouses de Nueva York. Alejandra Vélez soñaba con montar algo suyo. Se conocieron, se enamoraron, y llevaron ese sueño hasta A Coruña.
+                  {t(bloques, "historia_parrafo_1")}
                 </p>
               </Reveal>
               <Reveal delay={0.2}>
                 <p className="mt-6 text-lg text-cream/70 max-w-xl">
-                  Franky&apos;s Burger lo montaron con sus propias manos: paredes negras, madera, plancha, salsas y pan brioche. Carne de vaca madurada premium, aplastada al momento, hasta conseguir esa costra crujiente que solo da la smash bien hecha.
+                  {t(bloques, "historia_parrafo_2")}
                 </p>
               </Reveal>
               <Reveal delay={0.3}>
                 <p className="mt-8 font-display text-2xl text-tomato">
-                  &ldquo;Muerde el amor.&rdquo;
+                  &ldquo;{t(bloques, "historia_frase_final", "Muerde el amor.")}&rdquo;
                 </p>
               </Reveal>
             </div>
@@ -121,7 +126,7 @@ function Index() {
         <section className="relative py-32 md:py-40">
           <div className="absolute inset-0 -z-0 overflow-hidden">
             <img
-              src={interior.url}
+              src={comoImg}
               alt=""
               aria-hidden
               className="w-full h-full object-cover opacity-25"
@@ -131,21 +136,21 @@ function Index() {
           <div className="container-x relative">
             <Reveal>
               <p className="uppercase tracking-[0.3em] text-xs font-semibold text-gold mb-6">
-                Cómo lo hacemos
+                {t(bloques, "como_kicker", "Cómo lo hacemos")}
               </p>
             </Reveal>
             <Reveal delay={0.1}>
               <h2 className="font-display text-[clamp(2.5rem,8vw,7rem)] max-w-5xl text-cream">
-                Vaca madurada.<br />
-                Plancha al rojo.<br />
-                <span className="text-tomato">Pan brioche recién tostado.</span>
+                {t(bloques, "como_titulo_1", "Vaca madurada.")}<br />
+                {t(bloques, "como_titulo_2", "Plancha al rojo.")}<br />
+                <span className="text-tomato">{t(bloques, "como_titulo_3", "Pan brioche recién tostado.")}</span>
               </h2>
             </Reveal>
             <div className="grid md:grid-cols-3 gap-6 mt-20">
               {[
-                { t: "Smash de verdad", d: "Bola de carne aplastada sobre plancha caliente. Costra crujiente, jugo dentro." },
-                { t: "Salsas de casa", d: "Franky's, Monster, salsa de pimientos rojos y jalapeños. Todo hecho aquí." },
-                { t: "Barra y mesa", d: "Te sentamos, tomamos nota, te la llevamos. Servicio de barra, ambiente cercano." },
+                { t: t(bloques, "como_tarjeta_1_titulo", "Smash de verdad"), d: t(bloques, "como_tarjeta_1_texto", "") },
+                { t: t(bloques, "como_tarjeta_2_titulo", "Salsas de casa"), d: t(bloques, "como_tarjeta_2_texto", "") },
+                { t: t(bloques, "como_tarjeta_3_titulo", "Barra y mesa"), d: t(bloques, "como_tarjeta_3_texto", "") },
               ].map((f, k) => (
                 <Reveal key={f.t} delay={0.1 * k}>
                   <div className="hover-lift h-full rounded-lg border border-border bg-card/80 backdrop-blur p-8">
@@ -165,19 +170,19 @@ function Index() {
             <div className="text-center mb-16">
               <Reveal>
                 <p className="uppercase tracking-[0.3em] text-xs font-semibold text-tomato mb-4">
-                  Lo que dicen de nosotros
+                  {t(bloques, "resenas_kicker", "Lo que dicen de nosotros")}
                 </p>
               </Reveal>
               <Reveal delay={0.1}>
                 <h2 className="font-display text-[clamp(2.5rem,6vw,5rem)] text-cream">
-                  Nota perfecta<br />
-                  <span className="text-tomato">en A Coruña.</span>
+                  {t(bloques, "resenas_titulo_1", "Nota perfecta")}<br />
+                  <span className="text-tomato">{t(bloques, "resenas_titulo_2", "en A Coruña.")}</span>
                 </h2>
               </Reveal>
               <Reveal delay={0.2}>
                 <div className="mt-6 inline-flex items-center gap-3 bg-card border border-border rounded-full px-5 py-3">
                   <span className="text-gold text-lg tracking-widest">★★★★★</span>
-                  <span className="text-sm text-cream/80 font-semibold">5,0 · 558 reseñas en Google</span>
+                  <span className="text-sm text-cream/80 font-semibold">{t(bloques, "resenas_nota", "5,0")} · {t(bloques, "resenas_numero", "558")} reseñas en Google</span>
                 </div>
               </Reveal>
             </div>
@@ -194,13 +199,13 @@ function Index() {
                   ))}
                 </div>
                 <p className="font-display text-3xl md:text-4xl text-cream leading-tight">
-                  5,0 sobre 5
+                  {t(bloques, "resenas_nota", "5,0")} sobre 5
                 </p>
                 <p className="mt-3 text-cream/70">
-                  Basado en 558 reseñas reales de clientes en Google.
+                  {t(bloques, "resenas_texto_tarjeta", "Basado en 558 reseñas reales de clientes en Google.")}
                 </p>
                 <span className="mt-6 inline-flex items-center gap-2 text-tomato font-semibold underline underline-offset-4">
-                  Leer las reseñas en Google Maps →
+                  {t(bloques, "resenas_cta", "Leer las reseñas en Google Maps →")}
                 </span>
               </a>
             </Reveal>
@@ -212,17 +217,17 @@ function Index() {
           <Reveal>
             <div className="hover-lift relative overflow-hidden bg-gradient-to-br from-tomato/20 via-card to-card border border-tomato/30 rounded-2xl p-12 md:p-20 text-center">
               <p className="font-display text-[clamp(2rem,5vw,4rem)] text-tomato leading-tight max-w-3xl mx-auto uppercase tracking-wider">
-                ¿Buscas <span className="text-tomato">Calidad</span>?
+                {t(bloques, "cta_titulo", "¿Buscas Calidad?")}
               </p>
               <p className="mt-4 text-lg md:text-xl text-cream/80 max-w-2xl mx-auto">
-                Vaca madurada premium, pan brioche recién tostado y salsas hechas en casa. Ven, pide o pruébala en Just Eat.
+                {t(bloques, "cta_texto", "")}
               </p>
               <div className="mt-8 flex flex-wrap gap-3 justify-center">
                 <Link
                   to="/carta"
                   className="hover-glow inline-flex items-center bg-tomato text-cream px-6 py-3 rounded-full font-semibold"
                 >
-                  Ver la carta →
+                  {t(bloques, "cta_boton_primario", "Ver la carta →")}
                 </Link>
                 <a
                   href="https://www.just-eat.es/restaurants-frankys-burger-a-coruna/menu"
@@ -230,7 +235,7 @@ function Index() {
                   rel="noopener noreferrer"
                   className="hover-lift inline-flex items-center border-2 border-cream/40 text-cream px-6 py-3 rounded-full font-semibold"
                 >
-                  Pedir a domicilio
+                  {t(bloques, "cta_boton_secundario", "Pedir a domicilio")}
                 </a>
               </div>
             </div>
@@ -243,15 +248,15 @@ function Index() {
             <Reveal>
               <div>
                 <p className="uppercase tracking-[0.3em] text-xs font-semibold text-tomato mb-4">
-                  Visítanos
+                  {t(bloques, "ubicacion_kicker", "Visítanos")}
                 </p>
                 <h2 className="font-display text-[clamp(2.5rem,6vw,5rem)] text-cream">
-                  A un paso<br />
-                  <span className="text-tomato">de Riazor.</span>
+                  {t(bloques, "ubicacion_titulo_1", "A un paso")}<br />
+                  <span className="text-tomato">{t(bloques, "ubicacion_titulo_2", "de Riazor.")}</span>
                 </h2>
                 <div className="mt-8 space-y-3 text-lg text-cream/80">
-                  <p>C. Pondal, 1, Bajo F</p>
-                  <p>15004 A Coruña</p>
+                  <p>{t(bloques, "ubicacion_direccion_1", "C. Pondal, 1, Bajo F")}</p>
+                  <p>{t(bloques, "ubicacion_direccion_2", "15004 A Coruña")}</p>
                 </div>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <a
@@ -266,7 +271,7 @@ function Index() {
                     href="tel:+34881336926"
                     className="hover-lift inline-flex items-center border-2 border-cream/30 text-cream px-5 py-3 rounded-full font-semibold"
                   >
-                    +34 881 33 69 26
+                    {t(bloques, "ubicacion_telefono", "+34 881 33 69 26")}
                   </a>
                 </div>
               </div>
@@ -274,17 +279,17 @@ function Index() {
 
             <Reveal delay={0.1}>
               <div className="hover-lift bg-card border border-border rounded-lg p-8">
-                <h3 className="font-display text-2xl text-cream mb-6">Horario</h3>
+                <h3 className="font-display text-2xl text-cream mb-6">{t(bloques, "ubicacion_horario_titulo", "Horario")}</h3>
                 <dl className="divide-y divide-border text-sm">
-                  {schedule.map(([day, hours]) => (
-                    <div key={day} className="flex justify-between gap-4 py-3">
-                      <dt className="font-semibold text-cream">{day}</dt>
-                      <dd className="text-right text-cream/60">{hours}</dd>
+                  {schedule.map((row) => (
+                    <div key={row.id} className="flex justify-between gap-4 py-3">
+                      <dt className="font-semibold text-cream">{row.dia}</dt>
+                      <dd className="text-right text-cream/60">{row.horario_texto}</dd>
                     </div>
                   ))}
                 </dl>
                 <p className="mt-6 text-xs text-cream/50">
-                  Horario actualizado. Si vienes en un día festivo, confírmalo por teléfono.
+                  {t(bloques, "ubicacion_horario_nota", "Horario actualizado. Si vienes en un día festivo, confírmalo por teléfono.")}
                 </p>
               </div>
             </Reveal>
