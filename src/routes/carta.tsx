@@ -3,6 +3,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Reveal } from "@/components/reveal";
 import { Flame } from "lucide-react";
+import { FlamesBackground } from "@/components/flames-background";
 
 export const Route = createFileRoute("/carta")({
   head: () => ({
@@ -203,10 +204,23 @@ const categories: Array<{ title: string; items: Item[]; note?: string }> = [
 ];
 
 function CartaPage() {
+  const cursorFor = (item: Item): string => {
+    if (item.tag === "18+") return "cursor-18";
+    if (item.tag === "Picante") return "cursor-chili";
+    if (
+      item.tag === "La de la casa" ||
+      item.tag === "Solo para valientes" ||
+      item.tag === "Para compartir"
+    ) {
+      return "cursor-fire";
+    }
+    return "";
+  };
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
+      <FlamesBackground />
       <SiteHeader />
-      <main className="pt-24">
+      <main className="relative z-10 pt-24">
         {/* Hero */}
         <section className="container-x pt-16 pb-24">
           <p className="uppercase tracking-[0.3em] text-xs font-semibold text-tomato mb-4">
@@ -243,7 +257,7 @@ function CartaPage() {
                 {cat.items.map((item) => (
                   <li
                     key={item.name}
-                    className="hover-lift bg-card/70 border border-border rounded-lg p-6 group cursor-default"
+                    className={`hover-lift bg-card/70 border border-border rounded-lg p-6 group ${cursorFor(item) || "cursor-default"}`}
                   >
                     <div className="flex items-baseline justify-between gap-3">
                       <h3 className="font-display text-xl md:text-2xl text-cream group-hover:text-tomato transition-colors">
