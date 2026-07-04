@@ -153,7 +153,7 @@ function AdminPage() {
 
   async function handleSignOut() {
     await supabase.auth.signOut();
-    navigate({ to: "/auth", replace: true });
+    navigate({ to: "/manage", replace: true });
   }
 
   return (
