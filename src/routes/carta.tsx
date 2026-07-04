@@ -1,11 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Reveal } from "@/components/reveal";
 import { Flame } from "lucide-react";
 import { FlamesBackground } from "@/components/flames-background";
+import { cartaQueryOptions, type MenuItem } from "@/lib/content";
 
 export const Route = createFileRoute("/carta")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(cartaQueryOptions),
   head: () => ({
     meta: [
       { title: "Carta | Franky's Burger A Coruña" },
