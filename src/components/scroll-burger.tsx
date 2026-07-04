@@ -43,17 +43,15 @@ export function ScrollBurger() {
     };
   }, [reduce]);
 
-  // Stays roughly centered on the right. Rotates on multiple axes with scroll.
-  const rotY = progress * 720;   // two full spins around vertical axis
-  const rotX = Math.sin(progress * Math.PI * 2) * 25;
-  const rotZ = progress * 180 - 30;
-  const scale = 0.85 + Math.sin(progress * Math.PI) * 0.25;
+  // 2D rotation only — counterclockwise as the user scrolls. No perspective
+  // distortion so the burger keeps its shape.
+  const rotZ = -progress * 540; // 1.5 turns counterclockwise
+  const scale = 0.9 + Math.sin(progress * Math.PI) * 0.15;
 
   return (
     <div
       aria-hidden
       className="pointer-events-none fixed inset-0 -z-0 overflow-hidden"
-      style={{ perspective: "1400px" }}
     >
       {/* brasa halo that pulses with the burger */}
       <div
@@ -71,8 +69,7 @@ export function ScrollBurger() {
           src={BURGER_URL}
           alt=""
           style={{
-            transform: `translate(-50%, -50%) rotateY(${rotY}deg) rotateX(${rotX}deg) rotateZ(${rotZ}deg) scale(${scale})`,
-            transformStyle: "preserve-3d",
+            transform: `translate(-50%, -50%) rotate(${rotZ}deg) scale(${scale})`,
             willChange: "transform",
             filter:
               "drop-shadow(0 40px 60px oklch(0 0 0 / 0.8)) drop-shadow(0 0 80px oklch(0.6 0.24 45 / 0.35))",

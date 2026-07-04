@@ -294,16 +294,6 @@ function CartaPage() {
         </div>
       </main>
 
-      {/* Sticky CTA */}
-      <a
-        href="https://www.just-eat.es/restaurants-frankys-burger-a-coruna/menu"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="hover-glow fixed bottom-6 right-6 z-50 bg-tomato text-cream px-5 py-3 rounded-full font-semibold shadow-[0_20px_40px_-10px_oklch(0.55_0.22_27/0.5)]"
-      >
-        Pedir en Just Eat →
-      </a>
-
       <SiteFooter />
     </div>
   );
