@@ -69,21 +69,9 @@ export function ScrollBurger() {
             "radial-gradient(circle, oklch(0.6 0.22 30 / 0.55), transparent 60%)",
         }}
       />
-      <motion.div
+      <div
         key={entryKey}
-        initial={reduce ? false : { opacity: 0, scale: 1.08, filter: "blur(28px)" }}
-        animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-        transition={
-          reduce
-            ? { duration: 0 }
-            : {
-                delay: 0.5,
-                opacity: { duration: 2.2, ease: [0.22, 1, 0.36, 1] },
-                filter: { duration: 2.4, ease: [0.22, 1, 0.36, 1] },
-                scale: { duration: 2.6, ease: [0.22, 1, 0.36, 1] },
-              }
-        }
-        className="absolute top-1/2 right-[8%] md:right-[12%] w-[70vw] max-w-[460px] md:w-[36vw] md:max-w-[560px]"
+        className="burger-stage absolute top-1/2 right-[8%] md:right-[12%] w-[70vw] max-w-[460px] md:w-[36vw] md:max-w-[560px]"
       >
         <div
           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-[130%] rounded-full"
@@ -133,9 +121,11 @@ export function ScrollBurger() {
             filter:
               "drop-shadow(0 40px 60px oklch(0 0 0 / 0.8)) drop-shadow(0 0 80px oklch(0.6 0.24 45 / 0.35))",
           }}
-          className="block w-full relative"
+          className="burger-reveal block w-full relative"
         />
-      </motion.div>
+        {/* warm spotlight sweep that brightens the center first, then spreads out */}
+        <div className="burger-spotlight absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[160%] h-[160%] rounded-full" />
+      </div>
       <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/70 to-transparent md:via-ink/40" />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ink/80" />
     </div>

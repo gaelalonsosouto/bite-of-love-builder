@@ -36,7 +36,7 @@ function Index() {
         aria-hidden
         initial={{ opacity: 1 }}
         animate={{ opacity: 0 }}
-        transition={{ duration: 1.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 3, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
         style={{ backgroundColor: "#0B0B0B" }}
         className="pointer-events-none fixed inset-0 z-40"
       />
