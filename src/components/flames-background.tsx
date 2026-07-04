@@ -62,9 +62,9 @@ export function FlamesBackground() {
       {/* Tall, sharp flame tongues — start near mid-screen and lower as you scroll */}
       {reduce ? null : (
         <div
-          className="absolute inset-x-0 bottom-[-4vh] h-[58vh] pointer-events-none"
+          className="absolute inset-x-0 bottom-0 h-[60vh] pointer-events-none"
           style={{
-            transform: `translateY(${progress * 22}vh) scaleY(${1 - progress * 0.35})`,
+            transform: `translateY(${progress * 20}vh) scaleY(${1 - progress * 0.4})`,
             transformOrigin: "50% 100%",
           }}
         >
