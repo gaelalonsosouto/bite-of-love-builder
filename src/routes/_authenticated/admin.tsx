@@ -5,8 +5,11 @@ import { supabase } from "@/integrations/supabase/client";
 import {
   bloquesQueryOptions,
   horarioQueryOptions,
+  cartaQueryOptions,
   type Bloque,
   type HorarioRow,
+  type MenuCategoria,
+  type MenuItem,
 } from "@/lib/content";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +17,25 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { ImageIcon, Pencil, Plus, Trash2 } from "lucide-react";
 
 type Group = {
   key: string;
@@ -118,6 +140,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
   loader: ({ context }) => {
     context.queryClient.ensureQueryData(bloquesQueryOptions);
     context.queryClient.ensureQueryData(horarioQueryOptions);
+    context.queryClient.ensureQueryData(cartaQueryOptions);
   },
   component: AdminPage,
 });
@@ -126,6 +149,7 @@ function AdminPage() {
   const navigate = useNavigate();
   const { data: bloques } = useSuspenseQuery(bloquesQueryOptions);
   const { data: horario } = useSuspenseQuery(horarioQueryOptions);
+  const { data: carta } = useSuspenseQuery(cartaQueryOptions);
 
   async function handleSignOut() {
     await supabase.auth.signOut();
@@ -139,7 +163,7 @@ function AdminPage() {
         <div className="container-x flex items-center justify-between py-4">
           <div>
             <h1 className="font-display text-2xl">Panel admin</h1>
-            <p className="text-xs text-muted-foreground uppercase tracking-widest">Inicio</p>
+            <p className="text-xs text-muted-foreground uppercase tracking-widest">Contenido editable</p>
           </div>
           <div className="flex gap-2">
             <a
@@ -155,11 +179,22 @@ function AdminPage() {
         </div>
       </header>
 
-      <main className="container-x py-10 space-y-10">
-        {GROUPS.map((g) => (
-          <SectionForm key={g.key} group={g} bloques={bloques} />
-        ))}
-        <HorarioForm horario={horario} />
+      <main className="container-x py-10">
+        <Tabs defaultValue="inicio">
+          <TabsList className="mb-8">
+            <TabsTrigger value="inicio">Inicio</TabsTrigger>
+            <TabsTrigger value="carta">Carta</TabsTrigger>
+          </TabsList>
+          <TabsContent value="inicio" className="space-y-10">
+            {GROUPS.map((g) => (
+              <SectionForm key={g.key} group={g} bloques={bloques} />
+            ))}
+            <HorarioForm horario={horario} />
+          </TabsContent>
+          <TabsContent value="carta">
+            <CartaAdmin categorias={carta} />
+          </TabsContent>
+        </Tabs>
       </main>
     </div>
   );
