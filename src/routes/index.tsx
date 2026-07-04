@@ -1,58 +1,29 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
+import { Star } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ScrollBurger } from "@/components/scroll-burger";
 import { Reveal } from "@/components/reveal";
-import { ReviewsCarousel, type Review } from "@/components/reviews-carousel";
 import interior from "@/assets/frankys-interior.webp.asset.json";
 import facade from "@/assets/frankys-facade.webp.asset.json";
+
+const MAPS_URL =
+  "https://www.google.com/maps/place/Franky's+Burger/@43.3545007,-9.0264456,9z/data=!4m10!1m2!2m1!1zZnJhbmvCtHlz!3m6!1s0xd2e7dae90f2d35d:0x74c8b3b9419d6322!8m2!3d43.3677895!4d-8.4122959!15sCglmcmFua8K0eXNaCiIIZnJhbmsgeXOSARRoYW1idXJnZXJfcmVzdGF1cmFudOABAA!16s%2Fg%2F11wwtz7ghb?entry=ttu";
+const MAPS_REVIEWS_URL = MAPS_URL;
 
 export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const reviews: Review[] = [
-  {
-    author: "Cliente en Google",
-    rating: 5,
-    quote:
-      "La classic cheeseburger es un acierto seguro: verduras crujientes, pan que no se humedece y carne en su punto.",
-  },
-  {
-    author: "Cliente en Google",
-    rating: 5,
-    quote:
-      "Calidad de hamburguesería de referencia en EE. UU., con un trato acogedor que se nota desde que entras.",
-  },
-  {
-    author: "Cliente en Google",
-    rating: 5,
-    quote:
-      "De las hamburgueserías favoritas de la zona. Nota perfecta en comida, servicio y ambiente.",
-  },
-  {
-    author: "Cliente en Google",
-    rating: 5,
-    quote:
-      "Una 1906 bien fría, la smash en la mano y Riazor a un paso. No se puede pedir más.",
-  },
-  {
-    author: "Cliente en Google",
-    rating: 5,
-    quote:
-      "Volví tres veces en una semana. La Franky's con cebolla caramelizada es adictiva.",
-  },
-];
-
 const schedule = [
   ["Lunes", "Cerrado"],
-  ["Martes", "20:00 – 06:00"],
-  ["Miércoles", "20:00 – 23:00"],
+  ["Martes", "20:00 – 00:00"],
+  ["Miércoles", "13:30 – 16:00 · 20:00 – 23:00"],
   ["Jueves", "13:30 – 16:00 · 20:00 – 23:00"],
   ["Viernes", "13:30 – 16:00 · 20:00 – 00:00"],
-  ["Sábado", "13:30 – 16:30 · 20:00 – 00:00"],
-  ["Domingo", "13:30 – 16:30 · 20:00 – 23:00"],
+  ["Sábado", "13:30 – 16:00 · 20:00 – 00:00"],
+  ["Domingo", "13:30 – 23:00 (horario continuo)"],
 ];
 
 function Index() {
@@ -210,10 +181,29 @@ function Index() {
                 </div>
               </Reveal>
             </div>
-            <ReviewsCarousel reviews={reviews} />
-            <p className="mt-8 text-center text-xs text-cream/50">
-              Pincha cualquier reseña para ver todas en Google Maps.
-            </p>
+            <Reveal delay={0.3}>
+              <a
+                href={MAPS_REVIEWS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover-lift block max-w-2xl mx-auto rounded-2xl border border-border bg-card/95 backdrop-blur p-10 text-center"
+              >
+                <div className="flex items-center justify-center gap-1 text-gold mb-4">
+                  {Array.from({ length: 5 }).map((_, k) => (
+                    <Star key={k} fill="currentColor" strokeWidth={0} size={22} />
+                  ))}
+                </div>
+                <p className="font-display text-3xl md:text-4xl text-cream leading-tight">
+                  5,0 sobre 5
+                </p>
+                <p className="mt-3 text-cream/70">
+                  Basado en 558 reseñas reales de clientes en Google.
+                </p>
+                <span className="mt-6 inline-flex items-center gap-2 text-tomato font-semibold underline underline-offset-4">
+                  Leer las reseñas en Google Maps →
+                </span>
+              </a>
+            </Reveal>
           </div>
         </section>
 
@@ -222,10 +212,10 @@ function Index() {
           <Reveal>
             <div className="hover-lift relative overflow-hidden bg-gradient-to-br from-tomato/20 via-card to-card border border-tomato/30 rounded-2xl p-12 md:p-20 text-center">
               <p className="font-display text-[clamp(2rem,5vw,4rem)] text-tomato leading-tight max-w-3xl mx-auto uppercase tracking-wider">
-                ¿Tienes Hambre?
+                ¿Buscas <span className="text-tomato">Calidad</span>?
               </p>
               <p className="mt-4 text-lg md:text-xl text-cream/80 max-w-2xl mx-auto">
-                Entra en Just Eat y pide tu smash burger favorita a domicilio.
+                Vaca madurada premium, pan brioche recién tostado y salsas hechas en casa. Ven, pide o pruébala en Just Eat.
               </p>
               <div className="mt-8 flex flex-wrap gap-3 justify-center">
                 <Link
@@ -265,7 +255,7 @@ function Index() {
                 </div>
                 <div className="mt-6 flex flex-wrap gap-3">
                   <a
-                    href="https://www.google.com/maps/search/?api=1&query=43.3677895,-8.4122959"
+                    href={MAPS_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover-glow inline-flex items-center bg-tomato text-cream px-5 py-3 rounded-full font-semibold"
@@ -294,7 +284,7 @@ function Index() {
                   ))}
                 </dl>
                 <p className="mt-6 text-xs text-cream/50">
-                  Nota: el horario del martes es amplio. Confírmalo por teléfono antes de tu visita.
+                  Horario actualizado. Si vienes en un día festivo, confírmalo por teléfono.
                 </p>
               </div>
             </Reveal>
@@ -305,7 +295,7 @@ function Index() {
               <div className="hover-lift rounded-lg overflow-hidden border border-border">
                 <iframe
                   title="Ubicación de Franky's Burger en A Coruña"
-                  src="https://www.google.com/maps?q=C.+Pondal,+1,+Bajo+F,+15004+A+Coruña&output=embed"
+                  src="https://www.google.com/maps?q=Franky's+Burger,+C.+Pondal+1,+15004+A+Coruña&output=embed"
                   width="100%"
                   height="380"
                   style={{ border: 0, filter: "invert(0.92) hue-rotate(180deg)" }}

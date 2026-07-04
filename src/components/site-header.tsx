@@ -1,20 +1,15 @@
 import { Link } from "@tanstack/react-router";
 
 function JustEatBadge() {
+  // Simplified Just Eat house mark: orange rounded square with a white
+  // stylised house/chevron — matches the real brand mark shape.
   return (
-    <svg viewBox="0 0 24 24" width={16} height={16} aria-hidden className="shrink-0">
-      <rect x="1" y="1" width="22" height="22" rx="6" fill="#FFFFFF" />
-      <text
-        x="12"
-        y="16.5"
-        textAnchor="middle"
-        fontFamily="Archivo Black, Impact, sans-serif"
-        fontSize="10"
-        fontWeight="900"
-        fill="#FF8000"
-      >
-        je
-      </text>
+    <svg viewBox="0 0 24 24" width={18} height={18} aria-hidden className="shrink-0">
+      <rect x="0" y="0" width="24" height="24" rx="6" fill="#FF8000" />
+      <path
+        d="M12 5.5 L18.5 12 H16 V18 H13.5 V13.5 H10.5 V18 H8 V12 H5.5 Z"
+        fill="#FFFFFF"
+      />
     </svg>
   );
 }
