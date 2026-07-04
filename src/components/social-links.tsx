@@ -1,13 +1,5 @@
-import { Instagram, Facebook } from "lucide-react";
+import { Instagram } from "lucide-react";
 import type { SVGProps } from "react";
-
-function XIcon(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>
-      <path d="M18.244 2H21l-6.52 7.45L22 22h-6.9l-4.72-6.17L4.8 22H2l7.02-8.02L2 2h6.98l4.34 5.73L18.24 2zm-2.42 18h1.9L7.28 4H5.26l10.56 16z" />
-    </svg>
-  );
-}
 
 function TikTokIcon(props: SVGProps<SVGSVGElement>) {
   return (
@@ -18,9 +10,7 @@ function TikTokIcon(props: SVGProps<SVGSVGElement>) {
 }
 
 const links = [
-  { href: "https://www.instagram.com/frankysburgeroficial", label: "Instagram", Icon: Instagram },
-  { href: "https://www.facebook.com/frankysburgercoruna", label: "Facebook", Icon: Facebook },
-  { href: "https://x.com/frankysburger", label: "X (Twitter)", Icon: XIcon },
+  { href: "https://www.instagram.com/frankysburger.coruna/", label: "Instagram", Icon: Instagram },
   { href: "https://www.tiktok.com/@frankysburger", label: "TikTok", Icon: TikTokIcon },
 ];
 
