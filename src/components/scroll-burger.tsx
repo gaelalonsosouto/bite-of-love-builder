@@ -125,7 +125,7 @@ export function ScrollBurger() {
             />
           ))}
         </div>
-        <motion.img
+        <img
           src={BURGER_URL}
           alt=""
           style={{
@@ -133,13 +133,6 @@ export function ScrollBurger() {
             willChange: "transform",
             filter:
               "drop-shadow(0 40px 60px oklch(0 0 0 / 0.8)) drop-shadow(0 0 80px oklch(0.6 0.24 45 / 0.35))",
-          }}
-          animate={reduce ? undefined : { y: [0, -8, 0] }}
-          transition={{
-            duration: 5,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1.2,
           }}
           className="block w-full relative"
         />
