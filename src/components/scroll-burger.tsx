@@ -71,17 +71,16 @@ export function ScrollBurger() {
       />
       <motion.div
         key={entryKey}
-        initial={reduce ? false : { y: "-120vh", opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
+        initial={reduce ? false : { opacity: 0, scale: 1.08, filter: "blur(28px)" }}
+        animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
         transition={
           reduce
             ? { duration: 0 }
             : {
-                type: "spring",
-                stiffness: 90,
-                damping: 11,
-                mass: 1.2,
-                delay: 0.25,
+                delay: 0.5,
+                opacity: { duration: 2.2, ease: [0.22, 1, 0.36, 1] },
+                filter: { duration: 2.4, ease: [0.22, 1, 0.36, 1] },
+                scale: { duration: 2.6, ease: [0.22, 1, 0.36, 1] },
               }
         }
         className="absolute top-1/2 right-[8%] md:right-[12%] w-[70vw] max-w-[460px] md:w-[36vw] md:max-w-[560px]"
