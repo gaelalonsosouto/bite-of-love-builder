@@ -19,7 +19,7 @@ export const Route = createFileRoute("/")({
 const schedule = [
   ["Lunes", "Cerrado"],
   ["Martes", "20:00 – 00:00"],
-  ["Miércoles", "13:30 – 16:00 y 20:00 – 23:00"],
+  ["Miércoles", "13:30 – 6:00 y 20:00 – 23:00"],
   ["Jueves", "13:30 – 16:00 y 20:00 – 23:00"],
   ["Viernes", "13:30 – 16:00 y 20:00 – 00:00"],
   ["Sábado", "13:30 – 16:00 y 20:00 – 00:00"],
