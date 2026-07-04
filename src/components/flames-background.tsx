@@ -15,17 +15,11 @@ export function FlamesBackground() {
     const update = () => {
       const doc = document.documentElement;
       const max = doc.scrollHeight - window.innerHeight;
-      // Flames stay lit almost the whole page — fully extinguished just
-      // before hitting the footer (around ~92% scrolled).
+      // Progress tracks the scroll linearly so flames descend smoothly
+      // and are fully extinguished right before the footer (~92%).
       const raw = max > 0 ? window.scrollY / max : 0;
-      const start = 0.55; // start dimming at 55%
-      const end = 0.92;   // fully out just before the footer
-      const p =
-        raw <= start
-          ? 0
-          : raw >= end
-          ? 1
-          : (raw - start) / (end - start);
+      const end = 0.92;
+      const p = Math.min(1, Math.max(0, raw / end));
       setProgress(p);
       raf = 0;
     };
@@ -55,8 +49,9 @@ export function FlamesBackground() {
         className="absolute inset-x-0 bottom-0 h-[45vh]"
         style={{
           background:
-            "radial-gradient(ellipse 120% 100% at 50% 100%, oklch(0.78 0.24 50 / 0.75) 0%, oklch(0.6 0.24 35 / 0.55) 20%, oklch(0.4 0.2 25 / 0.35) 45%, transparent 80%)",
-          filter: `blur(${6 + progress * 10}px) saturate(${1.3 - progress * 0.6})`,
+            "radial-gradient(ellipse 120% 100% at 50% 100%, oklch(0.78 0.24 50 / 0.6) 0%, oklch(0.6 0.24 35 / 0.4) 25%, oklch(0.4 0.2 25 / 0.22) 50%, transparent 82%)",
+          filter: `blur(${18 + progress * 14}px) saturate(${1.2 - progress * 0.5})`,
+          transform: `translateY(${progress * 30}vh)`,
         }}
       />
       {/* Tall, sharp flame tongues — start near mid-screen and lower as you scroll */}
@@ -64,8 +59,9 @@ export function FlamesBackground() {
         <div
           className="absolute inset-x-0 bottom-0 h-[60vh] pointer-events-none"
           style={{
-            transform: `translateY(${progress * 20}vh) scaleY(${1 - progress * 0.4})`,
+            transform: `translateY(${progress * 55}vh) scaleY(${1 - progress * 0.55})`,
             transformOrigin: "50% 100%",
+            filter: `blur(${4 + progress * 8}px)`,
           }}
         >
           <FlamePlume left="8%"  delay="0s"    scale={1.0} />
