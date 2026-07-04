@@ -31,6 +31,15 @@ function Index() {
     <div className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
       <ScrollBurger />
       <SiteHeader />
+      {/* Cinematic black-out overlay that fades away as the burger reveals */}
+      <motion.div
+        aria-hidden
+        initial={{ opacity: 1 }}
+        animate={{ opacity: 0 }}
+        transition={{ duration: 1.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        style={{ backgroundColor: "#0B0B0B" }}
+        className="pointer-events-none fixed inset-0 z-40"
+      />
       <main className="relative z-10">
         {/* HERO */}
         <section className="min-h-[92vh] flex items-center pt-28 pb-16">
@@ -38,7 +47,7 @@ function Index() {
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 1, delay: 2, ease: [0.22, 1, 0.36, 1] }}
               className="max-w-2xl"
             >
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-tomato/40 bg-tomato/10 text-tomato text-xs uppercase tracking-[0.3em] font-semibold ember">
