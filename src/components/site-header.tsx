@@ -1,18 +1,5 @@
 import { Link } from "@tanstack/react-router";
-
-function JustEatBadge() {
-  // Simplified Just Eat house mark: orange rounded square with a white
-  // stylised house/chevron — matches the real brand mark shape.
-  return (
-    <svg viewBox="0 0 24 24" width={18} height={18} aria-hidden className="shrink-0">
-      <rect x="0" y="0" width="24" height="24" rx="6" fill="#FF8000" />
-      <path
-        d="M12 5.5 L18.5 12 H16 V18 H13.5 V13.5 H10.5 V18 H8 V12 H5.5 Z"
-        fill="#FFFFFF"
-      />
-    </svg>
-  );
-}
+import justEatLogo from "@/assets/just-eat-logo.png.asset.json";
 
 export function SiteHeader() {
   return (
@@ -32,7 +19,7 @@ export function SiteHeader() {
             style={{ backgroundColor: "#FF8000" }}
             className="hover-glow inline-flex items-center gap-2 text-white px-4 py-2 rounded-full text-xs sm:text-sm font-semibold"
           >
-            <JustEatBadge />
+            <img src={justEatLogo.url} alt="Just Eat" width={20} height={20} className="shrink-0" />
             Pedir online
           </a>
         </nav>
