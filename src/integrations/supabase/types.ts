@@ -14,7 +14,137 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      contenido_bloques: {
+        Row: {
+          created_at: string
+          etiqueta: string
+          id: string
+          seccion: string
+          tipo: string
+          updated_at: string
+          valor: string
+        }
+        Insert: {
+          created_at?: string
+          etiqueta: string
+          id: string
+          seccion: string
+          tipo: string
+          updated_at?: string
+          valor?: string
+        }
+        Update: {
+          created_at?: string
+          etiqueta?: string
+          id?: string
+          seccion?: string
+          tipo?: string
+          updated_at?: string
+          valor?: string
+        }
+        Relationships: []
+      }
+      horario: {
+        Row: {
+          created_at: string
+          dia: string
+          horario_texto: string
+          id: string
+          orden: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          dia: string
+          horario_texto: string
+          id?: string
+          orden: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          dia?: string
+          horario_texto?: string
+          id?: string
+          orden?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      menu_categorias: {
+        Row: {
+          created_at: string
+          id: string
+          nombre: string
+          nota: string | null
+          orden: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          nombre: string
+          nota?: string | null
+          orden: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          nombre?: string
+          nota?: string | null
+          orden?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      menu_items: {
+        Row: {
+          categoria_id: string
+          created_at: string
+          descripcion: string
+          etiqueta: string | null
+          id: string
+          imagen_url: string | null
+          nombre: string
+          orden: number
+          precio: number | null
+          updated_at: string
+        }
+        Insert: {
+          categoria_id: string
+          created_at?: string
+          descripcion?: string
+          etiqueta?: string | null
+          id?: string
+          imagen_url?: string | null
+          nombre: string
+          orden?: number
+          precio?: number | null
+          updated_at?: string
+        }
+        Update: {
+          categoria_id?: string
+          created_at?: string
+          descripcion?: string
+          etiqueta?: string | null
+          id?: string
+          imagen_url?: string | null
+          nombre?: string
+          orden?: number
+          precio?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "menu_items_categoria_id_fkey"
+            columns: ["categoria_id"]
+            isOneToOne: false
+            referencedRelation: "menu_categorias"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
