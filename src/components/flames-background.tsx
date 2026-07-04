@@ -15,8 +15,17 @@ export function FlamesBackground() {
     const update = () => {
       const doc = document.documentElement;
       const max = doc.scrollHeight - window.innerHeight;
-      // Extinguish more aggressively — fully out by ~40% of the page
-      const p = max > 0 ? Math.min(1, (window.scrollY / max) * 2.5) : 0;
+      // Flames stay lit almost the whole page — fully extinguished just
+      // before hitting the footer (around ~92% scrolled).
+      const raw = max > 0 ? window.scrollY / max : 0;
+      const start = 0.55; // start dimming at 55%
+      const end = 0.92;   // fully out just before the footer
+      const p =
+        raw <= start
+          ? 0
+          : raw >= end
+          ? 1
+          : (raw - start) / (end - start);
       setProgress(p);
       raf = 0;
     };
@@ -41,31 +50,35 @@ export function FlamesBackground() {
       className="pointer-events-none fixed inset-0 -z-0 overflow-hidden"
       style={{ opacity: intensity }}
     >
-      {/* Ember glow at the bottom */}
+      {/* Wide grill bed of embers along the bottom */}
       <div
-        className="absolute inset-x-0 bottom-0 h-[70vh]"
+        className="absolute inset-x-0 bottom-0 h-[45vh]"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 100%, oklch(0.68 0.24 45 / 0.55) 0%, oklch(0.55 0.22 27 / 0.35) 25%, oklch(0.25 0.12 25 / 0.2) 50%, transparent 75%)",
-          filter: `blur(${8 + progress * 8}px)`,
+            "radial-gradient(ellipse 120% 100% at 50% 100%, oklch(0.78 0.24 50 / 0.75) 0%, oklch(0.6 0.24 35 / 0.55) 20%, oklch(0.4 0.2 25 / 0.35) 45%, transparent 80%)",
+          filter: `blur(${6 + progress * 10}px) saturate(${1.3 - progress * 0.6})`,
         }}
       />
-      {/* Individual flame plumes */}
+      {/* Grill-style flame tongues — wider, shorter, licking sideways */}
       {reduce ? null : (
         <>
-          <FlamePlume left="12%" delay="0s" scale={1} />
-          <FlamePlume left="28%" delay="0.4s" scale={0.85} />
-          <FlamePlume left="46%" delay="0.15s" scale={1.15} />
-          <FlamePlume left="62%" delay="0.6s" scale={0.9} />
-          <FlamePlume left="82%" delay="0.25s" scale={1.05} />
+          <FlamePlume left="8%"  delay="0s"    scale={1.0} />
+          <FlamePlume left="20%" delay="0.3s"  scale={0.9} />
+          <FlamePlume left="32%" delay="0.7s"  scale={1.1} />
+          <FlamePlume left="44%" delay="0.15s" scale={0.95} />
+          <FlamePlume left="56%" delay="0.5s"  scale={1.15} />
+          <FlamePlume left="68%" delay="0.2s"  scale={0.9} />
+          <FlamePlume left="80%" delay="0.6s"  scale={1.05} />
+          <FlamePlume left="92%" delay="0.35s" scale={0.95} />
         </>
       )}
-      {/* Subtle heat haze at the very bottom */}
+      {/* Hot coal glow strip at the very bottom */}
       <div
-        className="absolute inset-x-0 bottom-0 h-32"
+        className="absolute inset-x-0 bottom-0 h-24"
         style={{
           background:
-            "linear-gradient(to top, oklch(0.7 0.2 55 / 0.35), transparent)",
+            "linear-gradient(to top, oklch(0.72 0.26 45 / 0.6), oklch(0.5 0.22 30 / 0.25) 50%, transparent)",
+          mixBlendMode: "screen",
         }}
       />
     </div>
@@ -83,7 +96,7 @@ function FlamePlume({
 }) {
   return (
     <div
-      className="absolute bottom-[-6vh] w-[22vw] h-[55vh] flame-plume"
+      className="absolute bottom-[-4vh] w-[14vw] h-[32vh] flame-plume"
       style={{
         left,
         transform: `translateX(-50%) scale(${scale})`,

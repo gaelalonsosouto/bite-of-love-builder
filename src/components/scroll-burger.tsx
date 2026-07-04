@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useReducedMotion } from "motion/react";
+import { useLocation } from "@tanstack/react-router";
 import burgerAsset from "@/assets/smash-burger.png.asset.json";
 
 /**
@@ -12,6 +13,13 @@ const BURGER_URL = burgerAsset.url;
 export function ScrollBurger() {
   const reduce = useReducedMotion();
   const [progress, setProgress] = useState(0);
+  const location = useLocation();
+  // Re-key on every navigation to /, so the fall-in replays every time the
+  // user lands on or returns to the home page.
+  const [entryKey, setEntryKey] = useState(0);
+  useEffect(() => {
+    if (location.pathname === "/") setEntryKey((k) => k + 1);
+  }, [location.pathname]);
 
   useEffect(() => {
     if (reduce) return;
@@ -55,18 +63,23 @@ export function ScrollBurger() {
             "radial-gradient(circle, oklch(0.6 0.22 30 / 0.55), transparent 60%)",
         }}
       />
-      <img
-        src={BURGER_URL}
-        alt=""
-        style={{
-          transform: `translate(-50%, -50%) rotateY(${rotY}deg) rotateX(${rotX}deg) rotateZ(${rotZ}deg) scale(${scale})`,
-          transformStyle: "preserve-3d",
-          willChange: "transform",
-          filter:
-            "drop-shadow(0 40px 60px oklch(0 0 0 / 0.8)) drop-shadow(0 0 80px oklch(0.6 0.24 45 / 0.35))",
-        }}
-        className="absolute top-1/2 right-[8%] md:right-[12%] w-[70vw] max-w-[460px] md:w-[36vw] md:max-w-[560px]"
-      />
+      <div
+        key={entryKey}
+        className="absolute top-1/2 right-[8%] md:right-[12%] w-[70vw] max-w-[460px] md:w-[36vw] md:max-w-[560px] burger-drop-in"
+      >
+        <img
+          src={BURGER_URL}
+          alt=""
+          style={{
+            transform: `translate(-50%, -50%) rotateY(${rotY}deg) rotateX(${rotX}deg) rotateZ(${rotZ}deg) scale(${scale})`,
+            transformStyle: "preserve-3d",
+            willChange: "transform",
+            filter:
+              "drop-shadow(0 40px 60px oklch(0 0 0 / 0.8)) drop-shadow(0 0 80px oklch(0.6 0.24 45 / 0.35))",
+          }}
+          className="block w-full"
+        />
+      </div>
       {/* vignette to keep contrast for content */}
       <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/70 to-transparent md:via-ink/40" />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ink/80" />
