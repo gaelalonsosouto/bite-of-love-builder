@@ -135,7 +135,7 @@ const GROUPS: Group[] = [
   },
 ];
 
-export const Route = createFileRoute("/_authenticated/admin")({
+export const Route = createFileRoute("/_authenticated/panel-frankys-2847")({
   ssr: false,
   loader: ({ context }) => {
     context.queryClient.ensureQueryData(bloquesQueryOptions);
