@@ -64,14 +64,15 @@ export function FlamesBackground() {
             filter: `blur(${4 + progress * 8}px)`,
           }}
         >
-          <FlamePlume left="8%"  delay="0s"    scale={1.0} />
-          <FlamePlume left="20%" delay="0.3s"  scale={0.9} />
-          <FlamePlume left="32%" delay="0.7s"  scale={1.1} />
-          <FlamePlume left="44%" delay="0.15s" scale={0.95} />
-          <FlamePlume left="56%" delay="0.5s"  scale={1.15} />
-          <FlamePlume left="68%" delay="0.2s"  scale={0.9} />
-          <FlamePlume left="80%" delay="0.6s"  scale={1.05} />
-          <FlamePlume left="92%" delay="0.35s" scale={0.95} />
+          {/* Side plumes sit lower; center plumes stand tallest. Height + delay + duration vary per plume so nothing flickers in sync. */}
+          <FlamePlume left="8%"  delay="-0.4s"  scale={0.78} heightPct={62} duration="2.1s" />
+          <FlamePlume left="20%" delay="0.35s"  scale={0.88} heightPct={74} duration="1.55s" />
+          <FlamePlume left="32%" delay="-0.9s"  scale={1.02} heightPct={88} duration="1.8s" />
+          <FlamePlume left="44%" delay="0.15s"  scale={1.08} heightPct={96} duration="1.25s" />
+          <FlamePlume left="56%" delay="-0.55s" scale={1.12} heightPct={100} duration="1.9s" />
+          <FlamePlume left="68%" delay="0.5s"   scale={1.0}  heightPct={90} duration="1.4s" />
+          <FlamePlume left="80%" delay="-0.25s" scale={0.9}  heightPct={76} duration="1.65s" />
+          <FlamePlume left="92%" delay="0.6s"   scale={0.8}  heightPct={64} duration="2.2s" />
         </div>
       )}
       {/* Hot coal glow strip at the very bottom */}
@@ -91,18 +92,25 @@ function FlamePlume({
   left,
   delay,
   scale,
+  heightPct,
+  duration,
 }: {
   left: string;
   delay: string;
   scale: number;
+  heightPct: number;
+  duration: string;
 }) {
   return (
     <div
-      className="absolute bottom-0 w-[12vw] h-full flame-plume"
+      className="absolute bottom-0 w-[12vw] flame-plume"
       style={{
         left,
+        height: `${heightPct}%`,
         transform: `translateX(-50%) scale(${scale})`,
-        animationDelay: delay,
+        // CSS vars propagate to child .flame-core / .flame-mid / .flame-outer
+        ["--plume-delay" as string]: delay,
+        ["--plume-duration" as string]: duration,
       }}
     >
       <div className="flame-core" />
