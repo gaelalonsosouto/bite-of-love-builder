@@ -61,17 +61,17 @@ const GROUPS: Group[] = [
     ],
   },
   {
-    key: "historia",
-    title: "Nuestra historia",
-    seccion: "historia",
+    key: "resenas",
+    title: "Reseñas",
+    seccion: "resenas",
     order: [
-      "historia_imagen",
-      "historia_kicker",
-      "historia_titulo_1",
-      "historia_titulo_2",
-      "historia_parrafo_1",
-      "historia_parrafo_2",
-      "historia_frase_final",
+      "resenas_kicker",
+      "resenas_titulo_1",
+      "resenas_titulo_2",
+      "resenas_nota",
+      "resenas_numero",
+      "resenas_texto_tarjeta",
+      "resenas_cta",
     ],
   },
   {
@@ -93,17 +93,17 @@ const GROUPS: Group[] = [
     ],
   },
   {
-    key: "resenas",
-    title: "Reseñas",
-    seccion: "resenas",
+    key: "historia",
+    title: "Nuestra historia",
+    seccion: "historia",
     order: [
-      "resenas_kicker",
-      "resenas_titulo_1",
-      "resenas_titulo_2",
-      "resenas_nota",
-      "resenas_numero",
-      "resenas_texto_tarjeta",
-      "resenas_cta",
+      "historia_imagen",
+      "historia_kicker",
+      "historia_titulo_1",
+      "historia_titulo_2",
+      "historia_parrafo_1",
+      "historia_parrafo_2",
+      "historia_frase_final",
     ],
   },
   {
@@ -135,7 +135,7 @@ const GROUPS: Group[] = [
   },
 ];
 
-export const Route = createFileRoute("/_authenticated/admin")({
+export const Route = createFileRoute("/_authenticated/panel-frankys-2847")({
   ssr: false,
   loader: ({ context }) => {
     context.queryClient.ensureQueryData(bloquesQueryOptions);
@@ -153,7 +153,7 @@ function AdminPage() {
 
   async function handleSignOut() {
     await supabase.auth.signOut();
-    navigate({ to: "/auth", replace: true });
+    navigate({ to: "/manage", replace: true });
   }
 
   return (
@@ -187,9 +187,11 @@ function AdminPage() {
           </TabsList>
           <TabsContent value="inicio" className="space-y-10">
             {GROUPS.map((g) => (
-              <SectionForm key={g.key} group={g} bloques={bloques} />
+              <div key={g.key} className="space-y-10">
+                <SectionForm group={g} bloques={bloques} />
+                {g.key === "ubicacion" ? <HorarioForm horario={horario} /> : null}
+              </div>
             ))}
-            <HorarioForm horario={horario} />
           </TabsContent>
           <TabsContent value="carta">
             <CartaAdmin categorias={carta} />

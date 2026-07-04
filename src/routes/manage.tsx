@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export const Route = createFileRoute("/auth")({
+export const Route = createFileRoute("/manage")({
   ssr: false,
   beforeLoad: async () => {
     const { data } = await supabase.auth.getUser();
-    if (data.user) throw redirect({ to: "/admin" });
+    if (data.user) throw redirect({ to: "/panel-frankys-2847" });
   },
   component: AuthPage,
 });
@@ -31,7 +31,7 @@ function AuthPage() {
       setError(error.message);
       return;
     }
-    navigate({ to: "/admin" });
+    navigate({ to: "/panel-frankys-2847" });
   }
 
   return (

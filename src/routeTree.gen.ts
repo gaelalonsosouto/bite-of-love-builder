@@ -10,25 +10,25 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as ManageRouteImport } from './routes/manage'
 import { Route as CartaRouteImport } from './routes/carta'
-import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedPanelFrankys2847RouteImport } from './routes/_authenticated/panel-frankys-2847'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ManageRoute = ManageRouteImport.update({
+  id: '/manage',
+  path: '/manage',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CartaRoute = CartaRouteImport.update({
   id: '/carta',
   path: '/carta',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
@@ -40,55 +40,56 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
+const AuthenticatedPanelFrankys2847Route =
+  AuthenticatedPanelFrankys2847RouteImport.update({
+    id: '/panel-frankys-2847',
+    path: '/panel-frankys-2847',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
   '/carta': typeof CartaRoute
+  '/manage': typeof ManageRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/admin': typeof AuthenticatedAdminRoute
+  '/panel-frankys-2847': typeof AuthenticatedPanelFrankys2847Route
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
   '/carta': typeof CartaRoute
+  '/manage': typeof ManageRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/admin': typeof AuthenticatedAdminRoute
+  '/panel-frankys-2847': typeof AuthenticatedPanelFrankys2847Route
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
-  '/auth': typeof AuthRoute
   '/carta': typeof CartaRoute
+  '/manage': typeof ManageRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/panel-frankys-2847': typeof AuthenticatedPanelFrankys2847Route
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/carta' | '/sitemap.xml' | '/admin'
+  fullPaths: '/' | '/carta' | '/manage' | '/sitemap.xml' | '/panel-frankys-2847'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/carta' | '/sitemap.xml' | '/admin'
+  to: '/' | '/carta' | '/manage' | '/sitemap.xml' | '/panel-frankys-2847'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
-    | '/auth'
     | '/carta'
+    | '/manage'
     | '/sitemap.xml'
-    | '/_authenticated/admin'
+    | '/_authenticated/panel-frankys-2847'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
-  AuthRoute: typeof AuthRoute
   CartaRoute: typeof CartaRoute
+  ManageRoute: typeof ManageRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
@@ -101,18 +102,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/manage': {
+      id: '/manage'
+      path: '/manage'
+      fullPath: '/manage'
+      preLoaderRoute: typeof ManageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/carta': {
       id: '/carta'
       path: '/carta'
       fullPath: '/carta'
       preLoaderRoute: typeof CartaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -129,22 +130,22 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/admin': {
-      id: '/_authenticated/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+    '/_authenticated/panel-frankys-2847': {
+      id: '/_authenticated/panel-frankys-2847'
+      path: '/panel-frankys-2847'
+      fullPath: '/panel-frankys-2847'
+      preLoaderRoute: typeof AuthenticatedPanelFrankys2847RouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedPanelFrankys2847Route: typeof AuthenticatedPanelFrankys2847Route
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedPanelFrankys2847Route: AuthenticatedPanelFrankys2847Route,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -153,20 +154,10 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
-  AuthRoute: AuthRoute,
   CartaRoute: CartaRoute,
+  ManageRoute: ManageRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
