@@ -17,20 +17,25 @@ const links = [
 export function SocialLinks({ className = "" }: { className?: string }) {
   return (
     <ul className={`flex flex-wrap gap-3 ${className}`}>
-      {links.map(({ href, label, Icon }) => (
-        <li key={label}>
-          <a
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={label}
-            title={label}
-            className="hover-glow inline-flex items-center justify-center h-11 w-11 rounded-full border border-border bg-card text-cream hover:text-tomato hover:border-tomato"
-          >
-            <Icon width={18} height={18} />
-          </a>
-        </li>
-      ))}
+      {links.map(({ href, label, Icon }) => {
+        const ariaLabel = label === "Instagram"
+          ? "Sigue a Franky's Burger en Instagram"
+          : `Sigue a Franky's Burger en ${label}`;
+        return (
+          <li key={label}>
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={ariaLabel}
+              title={ariaLabel}
+              className="hover-glow inline-flex items-center justify-center h-11 w-11 rounded-full border border-border bg-card text-cream hover:text-tomato hover:border-tomato"
+            >
+              <Icon width={18} height={18} />
+            </a>
+          </li>
+        );
+      })}
     </ul>
   );
 }

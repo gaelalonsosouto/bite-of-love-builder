@@ -5,7 +5,7 @@ export function SiteHeader() {
   return (
     <header className="fixed top-0 inset-x-0 z-50 backdrop-blur-md bg-ink/80 border-b border-border/60">
       <div className="container-x flex items-center justify-between h-16">
-        <Link to="/" className="group inline-flex items-center gap-2 font-display text-xl tracking-tight text-cream transition-transform hover:scale-105">
+        <Link to="/" aria-label="Franky's Burger - Inicio" className="group inline-flex items-center gap-2 font-display text-xl tracking-tight text-cream transition-transform hover:scale-105">
           <span className="h-2 w-2 rounded-full bg-tomato ember" />
           FRANKY&apos;S <span className="text-tomato">BURGER</span>
         </Link>
@@ -19,7 +19,7 @@ export function SiteHeader() {
             style={{ backgroundColor: "#FF8000" }}
             className="hover-glow inline-flex items-center gap-2 text-white px-4 py-2 rounded-full text-xs sm:text-sm font-semibold"
           >
-            <img src={justEatLogo.url} alt="Just Eat" width={20} height={20} className="shrink-0" />
+            <img src={justEatLogo.url} alt="Just Eat delivery service logo" width={20} height={20} className="shrink-0" />
             Pedir en Just Eat
           </a>
         </nav>
