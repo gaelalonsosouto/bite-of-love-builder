@@ -472,3 +472,382 @@ function HorarioForm({ horario }: { horario: HorarioRow[] }) {
     </section>
   );
 }
+// ─── Carta admin ──────────────────────────────────────────────────────────
+
+type ItemDraft = {
+  nombre: string;
+  precio: string; // string in form, parse on save
+  descripcion: string;
+  etiqueta: string;
+  imagen_url: string;
+};
+
+const EMPTY_DRAFT: ItemDraft = {
+  nombre: "",
+  precio: "",
+  descripcion: "",
+  etiqueta: "",
+  imagen_url: "",
+};
+
+function CartaAdmin({ categorias }: { categorias: MenuCategoria[] }) {
+  const first = categorias[0]?.id ?? "";
+  return (
+    <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
+      <h2 className="font-display text-xl mb-1">Carta</h2>
+      <p className="text-xs text-muted-foreground uppercase tracking-widest mb-6">
+        Gestiona los productos de cada categoría
+      </p>
+      <Tabs defaultValue={first} orientation="vertical" className="flex flex-col md:flex-row gap-6">
+        <TabsList className="md:flex-col md:h-auto md:items-stretch md:bg-muted/40 md:p-2 flex-wrap">
+          {categorias.map((c) => (
+            <TabsTrigger
+              key={c.id}
+              value={c.id}
+              className="md:justify-start md:w-full data-[state=active]:bg-background"
+            >
+              {c.nombre}
+              <span className="ml-2 text-[10px] text-muted-foreground">{c.items.length}</span>
+            </TabsTrigger>
+          ))}
+        </TabsList>
+        <div className="flex-1 min-w-0">
+          {categorias.map((c) => (
+            <TabsContent key={c.id} value={c.id} className="mt-0">
+              <CategoriaPanel categoria={c} />
+            </TabsContent>
+          ))}
+        </div>
+      </Tabs>
+    </div>
+  );
+}
+
+function CategoriaPanel({ categoria }: { categoria: MenuCategoria }) {
+  const [editing, setEditing] = useState<MenuItem | null>(null);
+  const [creating, setCreating] = useState(false);
+  const [deleting, setDeleting] = useState<MenuItem | null>(null);
+  const qc = useQueryClient();
+
+  async function refetch() {
+    await qc.invalidateQueries({ queryKey: ["carta"] });
+  }
+
+  async function handleDelete() {
+    if (!deleting) return;
+    const { error } = await supabase.from("menu_items").delete().eq("id", deleting.id);
+    if (error) {
+      toast.error(`Error al eliminar: ${error.message}`);
+      return;
+    }
+    toast.success("Producto eliminado.");
+    setDeleting(null);
+    await refetch();
+  }
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h3 className="font-display text-2xl">{categoria.nombre}</h3>
+          {categoria.nota && (
+            <p className="text-xs text-muted-foreground italic">{categoria.nota}</p>
+          )}
+        </div>
+        <Button onClick={() => setCreating(true)}>
+          <Plus className="mr-1" /> Añadir producto
+        </Button>
+      </div>
+
+      {categoria.items.length === 0 ? (
+        <p className="text-sm text-muted-foreground py-8 text-center border border-dashed border-border rounded-md">
+          No hay productos en esta categoría todavía.
+        </p>
+      ) : (
+        <ul className="grid gap-3">
+          {categoria.items.map((it) => (
+            <li
+              key={it.id}
+              className="flex items-center gap-4 rounded-md border border-border bg-background p-3"
+            >
+              <div className="w-16 h-16 rounded-md border border-border bg-muted overflow-hidden flex items-center justify-center shrink-0">
+                {it.imagen_url ? (
+                  <img
+                    src={it.imagen_url}
+                    alt={it.nombre}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <ImageIcon className="text-muted-foreground" size={20} />
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-baseline gap-2 flex-wrap">
+                  <span className="font-semibold truncate">{it.nombre}</span>
+                  <span className="text-tomato font-display">
+                    {it.precio != null ? `${it.precio.toFixed(2)} €` : "—"}
+                  </span>
+                  {it.etiqueta && (
+                    <span className="text-[10px] uppercase tracking-widest bg-tomato/20 text-tomato border border-tomato/40 px-2 py-0.5 rounded-full">
+                      {it.etiqueta}
+                    </span>
+                  )}
+                </div>
+                {it.descripcion && (
+                  <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                    {it.descripcion}
+                  </p>
+                )}
+              </div>
+              <div className="flex gap-2 shrink-0">
+                <Button variant="outline" size="sm" onClick={() => setEditing(it)}>
+                  <Pencil /> Editar
+                </Button>
+                <Button variant="destructive" size="sm" onClick={() => setDeleting(it)}>
+                  <Trash2 />
+                </Button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {(editing || creating) && (
+        <ItemDialog
+          open
+          categoriaId={categoria.id}
+          categoriaNombre={categoria.nombre}
+          item={editing}
+          onClose={() => {
+            setEditing(null);
+            setCreating(false);
+          }}
+          onSaved={async () => {
+            setEditing(null);
+            setCreating(false);
+            await refetch();
+          }}
+          nextOrden={
+            categoria.items.length
+              ? Math.max(...categoria.items.map((i) => i.orden)) + 1
+              : 0
+          }
+        />
+      )}
+
+      <AlertDialog open={!!deleting} onOpenChange={(o) => !o && setDeleting(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Eliminar "{deleting?.nombre}"?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta acción no se puede deshacer. El producto desaparecerá de la carta pública.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDelete}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Eliminar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
+  );
+}
+
+function ItemDialog({
+  open,
+  categoriaId,
+  categoriaNombre,
+  item,
+  nextOrden,
+  onClose,
+  onSaved,
+}: {
+  open: boolean;
+  categoriaId: string;
+  categoriaNombre: string;
+  item: MenuItem | null;
+  nextOrden: number;
+  onClose: () => void;
+  onSaved: () => void | Promise<void>;
+}) {
+  const [draft, setDraft] = useState<ItemDraft>(() =>
+    item
+      ? {
+          nombre: item.nombre,
+          precio: item.precio != null ? String(item.precio) : "",
+          descripcion: item.descripcion ?? "",
+          etiqueta: item.etiqueta ?? "",
+          imagen_url: item.imagen_url ?? "",
+        }
+      : EMPTY_DRAFT,
+  );
+  const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+
+  function set<K extends keyof ItemDraft>(k: K, v: ItemDraft[K]) {
+    setDraft((prev) => ({ ...prev, [k]: v }));
+  }
+
+  async function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    const ext = file.name.split(".").pop() || "jpg";
+    const path = `menu/${categoriaId}-${Date.now()}.${ext}`;
+    const { error: upErr } = await supabase.storage
+      .from("contenido")
+      .upload(path, file, { cacheControl: "3600", upsert: false });
+    if (upErr) {
+      toast.error(`No se pudo subir la imagen: ${upErr.message}`);
+      setUploading(false);
+      return;
+    }
+    const { data } = supabase.storage.from("contenido").getPublicUrl(path);
+    set("imagen_url", data.publicUrl);
+    setUploading(false);
+    e.target.value = "";
+  }
+
+  async function onSave() {
+    if (!draft.nombre.trim()) {
+      toast.error("El nombre es obligatorio.");
+      return;
+    }
+    const precioNum = draft.precio.trim() === "" ? null : Number(draft.precio.replace(",", "."));
+    if (precioNum != null && Number.isNaN(precioNum)) {
+      toast.error("El precio no es válido.");
+      return;
+    }
+    setSaving(true);
+    const payload = {
+      categoria_id: categoriaId,
+      nombre: draft.nombre.trim(),
+      precio: precioNum,
+      descripcion: draft.descripcion,
+      etiqueta: draft.etiqueta.trim() || null,
+      imagen_url: draft.imagen_url || null,
+    };
+    if (item) {
+      const { error } = await supabase.from("menu_items").update(payload).eq("id", item.id);
+      if (error) {
+        toast.error(`Error al guardar: ${error.message}`);
+        setSaving(false);
+        return;
+      }
+      toast.success("Producto actualizado.");
+    } else {
+      const { error } = await supabase
+        .from("menu_items")
+        .insert({ ...payload, orden: nextOrden });
+      if (error) {
+        toast.error(`Error al crear: ${error.message}`);
+        setSaving(false);
+        return;
+      }
+      toast.success("Producto creado.");
+    }
+    setSaving(false);
+    await onSaved();
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-w-lg">
+        <DialogHeader>
+          <DialogTitle>
+            {item ? "Editar producto" : "Nuevo producto"} ·{" "}
+            <span className="text-muted-foreground font-normal">{categoriaNombre}</span>
+          </DialogTitle>
+        </DialogHeader>
+
+        <div className="grid gap-4">
+          <div>
+            <Label className="text-sm">Foto</Label>
+            <div className="flex items-start gap-3 mt-1">
+              <div className="w-24 h-24 rounded-md border border-border bg-muted overflow-hidden flex items-center justify-center shrink-0">
+                {draft.imagen_url ? (
+                  <img src={draft.imagen_url} alt="" className="w-full h-full object-cover" />
+                ) : (
+                  <ImageIcon className="text-muted-foreground" />
+                )}
+              </div>
+              <div className="flex-1 space-y-2">
+                <Input
+                  value={draft.imagen_url}
+                  onChange={(e) => set("imagen_url", e.target.value)}
+                  placeholder="URL de la foto (opcional)"
+                />
+                <label className="inline-flex items-center gap-2 text-sm">
+                  <span className="inline-flex items-center rounded-md border border-input px-3 py-2 hover:bg-accent cursor-pointer">
+                    {uploading ? "Subiendo…" : draft.imagen_url ? "Cambiar foto" : "Subir foto"}
+                  </span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleFile}
+                    disabled={uploading}
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor="nombre" className="text-sm">Nombre</Label>
+            <Input
+              id="nombre"
+              value={draft.nombre}
+              onChange={(e) => set("nombre", e.target.value)}
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="precio" className="text-sm">Precio (€)</Label>
+            <Input
+              id="precio"
+              inputMode="decimal"
+              placeholder="Ej: 9.50"
+              value={draft.precio}
+              onChange={(e) => set("precio", e.target.value)}
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="descripcion" className="text-sm">Descripción</Label>
+            <Textarea
+              id="descripcion"
+              rows={3}
+              value={draft.descripcion}
+              onChange={(e) => set("descripcion", e.target.value)}
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="etiqueta" className="text-sm">Etiqueta (opcional)</Label>
+            <Input
+              id="etiqueta"
+              value={draft.etiqueta}
+              placeholder="Ej: Picante · La de la casa · 18+"
+              onChange={(e) => set("etiqueta", e.target.value)}
+            />
+          </div>
+        </div>
+
+        <DialogFooter>
+          <Button variant="ghost" onClick={onClose} disabled={saving}>
+            Cancelar
+          </Button>
+          <Button onClick={onSave} disabled={saving || uploading}>
+            {saving ? "Guardando…" : item ? "Guardar cambios" : "Crear producto"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
