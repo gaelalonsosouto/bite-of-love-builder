@@ -59,9 +59,15 @@ export function FlamesBackground() {
           filter: `blur(${6 + progress * 10}px) saturate(${1.3 - progress * 0.6})`,
         }}
       />
-      {/* Grill-style flame tongues — wider, shorter, licking sideways */}
+      {/* Tall, sharp flame tongues — start near mid-screen and lower as you scroll */}
       {reduce ? null : (
-        <>
+        <div
+          className="absolute inset-x-0 bottom-0 h-[60vh] pointer-events-none"
+          style={{
+            transform: `translateY(${progress * 20}vh) scaleY(${1 - progress * 0.4})`,
+            transformOrigin: "50% 100%",
+          }}
+        >
           <FlamePlume left="8%"  delay="0s"    scale={1.0} />
           <FlamePlume left="20%" delay="0.3s"  scale={0.9} />
           <FlamePlume left="32%" delay="0.7s"  scale={1.1} />
@@ -70,7 +76,7 @@ export function FlamesBackground() {
           <FlamePlume left="68%" delay="0.2s"  scale={0.9} />
           <FlamePlume left="80%" delay="0.6s"  scale={1.05} />
           <FlamePlume left="92%" delay="0.35s" scale={0.95} />
-        </>
+        </div>
       )}
       {/* Hot coal glow strip at the very bottom */}
       <div
@@ -96,7 +102,7 @@ function FlamePlume({
 }) {
   return (
     <div
-      className="absolute bottom-[-4vh] w-[14vw] h-[32vh] flame-plume"
+      className="absolute bottom-0 w-[12vw] h-full flame-plume"
       style={{
         left,
         transform: `translateX(-50%) scale(${scale})`,
