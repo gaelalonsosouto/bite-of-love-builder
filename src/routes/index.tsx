@@ -56,6 +56,7 @@ function Index() {
                   const line2 = t(bloques, "hero_titulo_2", "en A Coruña");
                   return line2 ? (
                     <>
+                      {" "}
                       <br />
                       <span className="text-tomato">{line2}</span>
                     </>
