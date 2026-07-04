@@ -51,8 +51,16 @@ function Index() {
                 {t(bloques, "hero_badge", "A Coruña · Riazor")}
               </div>
               <h1 className="mt-6 font-display text-[clamp(3.5rem,10vw,8rem)] text-cream leading-[0.85]">
-                {t(bloques, "hero_titulo_1", "Muerde")}<br />
-                <span className="text-tomato">{t(bloques, "hero_titulo_2", "el amor.")}</span>
+                {t(bloques, "hero_titulo_1", "Franky's Burger — Smash burgers")}
+                {(() => {
+                  const line2 = t(bloques, "hero_titulo_2", "en A Coruña");
+                  return line2 ? (
+                    <>
+                      <br />
+                      <span className="text-tomato">{line2}</span>
+                    </>
+                  ) : null;
+                })()}
               </h1>
               <div className="mt-10 flex flex-wrap gap-3">
                 <Link
