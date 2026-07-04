@@ -108,8 +108,9 @@ function FlamePlume({
         left,
         height: `${heightPct}%`,
         transform: `translateX(-50%) scale(${scale})`,
-        animationDelay: delay,
-        animationDuration: duration,
+        // CSS vars propagate to child .flame-core / .flame-mid / .flame-outer
+        ["--plume-delay" as string]: delay,
+        ["--plume-duration" as string]: duration,
       }}
     >
       <div className="flame-core" />
