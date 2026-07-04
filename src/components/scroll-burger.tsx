@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { useReducedMotion } from "motion/react";
+import burgerAsset from "@/assets/smash-burger.png.asset.json";
 
 /**
- * Full-page burger that lives fixed at the right side of the viewport and
- * drops from the top of the page to the footer as the user scrolls.
- * Uses a realistic hotlinked photo (Unsplash, non-AI) — deliberately kept
- * as a single image, not composed of separated ingredients.
+ * Fixed 3D-rotating burger that spins in place as the user scrolls, inspired
+ * by the Black Cube website's rotating hero object. Perspective + rotateY +
+ * rotateX + rotateZ give a coin-like tumble; no longer falls down the page.
  */
-const BURGER_URL =
-  "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80";
+const BURGER_URL = burgerAsset.url;
 
 export function ScrollBurger() {
   const reduce = useReducedMotion();
@@ -36,37 +35,37 @@ export function ScrollBurger() {
     };
   }, [reduce]);
 
-  // Drop from -10% viewport height to 70% viewport height, gently rotate.
-  const topPct = -10 + progress * 80;
-  const rot = -18 + progress * 36;
-  const scale = 0.9 + Math.sin(progress * Math.PI) * 0.15;
+  // Stays roughly centered on the right. Rotates on multiple axes with scroll.
+  const rotY = progress * 720;   // two full spins around vertical axis
+  const rotX = Math.sin(progress * Math.PI * 2) * 25;
+  const rotZ = progress * 180 - 30;
+  const scale = 0.85 + Math.sin(progress * Math.PI) * 0.25;
 
   return (
     <div
       aria-hidden
       className="pointer-events-none fixed inset-0 -z-0 overflow-hidden"
+      style={{ perspective: "1400px" }}
     >
-      {/* red brasa halo that follows the burger */}
-      <motion.div
-        style={{ top: `${topPct + 15}%` }}
-        className="absolute right-[-8%] w-[60vw] h-[60vw] rounded-full blur-3xl opacity-40"
-        animate={{
-          background: [
-            "radial-gradient(circle, oklch(0.55 0.22 27 / 0.5), transparent 60%)",
+      {/* brasa halo that pulses with the burger */}
+      <div
+        className="absolute top-1/2 right-[-10%] w-[60vw] h-[60vw] -translate-y-1/2 rounded-full blur-3xl opacity-40"
+        style={{
+          background:
             "radial-gradient(circle, oklch(0.6 0.22 30 / 0.55), transparent 60%)",
-            "radial-gradient(circle, oklch(0.55 0.22 27 / 0.5), transparent 60%)",
-          ],
         }}
-        transition={{ duration: 4, repeat: Infinity }}
       />
-      <motion.img
+      <img
         src={BURGER_URL}
         alt=""
         style={{
-          top: `${topPct}%`,
-          transform: `translateX(-50%) rotate(${rot}deg) scale(${scale})`,
+          transform: `translate(-50%, -50%) rotateY(${rotY}deg) rotateX(${rotX}deg) rotateZ(${rotZ}deg) scale(${scale})`,
+          transformStyle: "preserve-3d",
+          willChange: "transform",
+          filter:
+            "drop-shadow(0 40px 60px oklch(0 0 0 / 0.8)) drop-shadow(0 0 80px oklch(0.6 0.24 45 / 0.35))",
         }}
-        className="absolute right-[-6%] md:right-[2%] w-[70vw] max-w-[520px] md:w-[38vw] md:max-w-[560px] rounded-full shadow-[0_40px_100px_-20px_oklch(0_0_0/0.9)]"
+        className="absolute top-1/2 right-[8%] md:right-[12%] w-[70vw] max-w-[460px] md:w-[36vw] md:max-w-[560px]"
       />
       {/* vignette to keep contrast for content */}
       <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/70 to-transparent md:via-ink/40" />
