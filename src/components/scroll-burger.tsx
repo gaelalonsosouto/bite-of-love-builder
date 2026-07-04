@@ -63,19 +63,23 @@ export function ScrollBurger() {
             "radial-gradient(circle, oklch(0.6 0.22 30 / 0.55), transparent 60%)",
         }}
       />
-      <img
+      <div
         key={entryKey}
-        src={BURGER_URL}
-        alt=""
-        style={{
-          transform: `translate(-50%, -50%) rotateY(${rotY}deg) rotateX(${rotX}deg) rotateZ(${rotZ}deg) scale(${scale})`,
-          transformStyle: "preserve-3d",
-          willChange: "transform",
-          filter:
-            "drop-shadow(0 40px 60px oklch(0 0 0 / 0.8)) drop-shadow(0 0 80px oklch(0.6 0.24 45 / 0.35))",
-        }}
         className="absolute top-1/2 right-[8%] md:right-[12%] w-[70vw] max-w-[460px] md:w-[36vw] md:max-w-[560px] burger-drop-in"
-      />
+      >
+        <img
+          src={BURGER_URL}
+          alt=""
+          style={{
+            transform: `translate(-50%, -50%) rotateY(${rotY}deg) rotateX(${rotX}deg) rotateZ(${rotZ}deg) scale(${scale})`,
+            transformStyle: "preserve-3d",
+            willChange: "transform",
+            filter:
+              "drop-shadow(0 40px 60px oklch(0 0 0 / 0.8)) drop-shadow(0 0 80px oklch(0.6 0.24 45 / 0.35))",
+          }}
+          className="block w-full"
+        />
+      </div>
       {/* vignette to keep contrast for content */}
       <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/70 to-transparent md:via-ink/40" />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-ink/80" />
