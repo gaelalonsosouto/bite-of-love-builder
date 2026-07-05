@@ -65,14 +65,14 @@ export function FlamesBackground() {
           }}
         >
           {/* Side plumes sit lower; center plumes stand tallest. Height + delay + duration vary per plume so nothing flickers in sync. */}
-          <FlamePlume left="8%"  delay="-0.4s"  scale={0.78} heightPct={62} duration="2.1s" />
-          <FlamePlume left="20%" delay="0.35s"  scale={0.88} heightPct={74} duration="1.55s" />
-          <FlamePlume left="32%" delay="-0.9s"  scale={1.02} heightPct={88} duration="1.8s" />
-          <FlamePlume left="44%" delay="0.15s"  scale={1.08} heightPct={96} duration="1.25s" />
-          <FlamePlume left="56%" delay="-0.55s" scale={1.12} heightPct={100} duration="1.9s" />
-          <FlamePlume left="68%" delay="0.5s"   scale={1.0}  heightPct={90} duration="1.4s" />
-          <FlamePlume left="80%" delay="-0.25s" scale={0.9}  heightPct={76} duration="1.65s" />
-          <FlamePlume left="92%" delay="0.6s"   scale={0.8}  heightPct={64} duration="2.2s" />
+          <FlamePlume left="8%"  delay="-1.3s" scale={0.78} heightPct={62}  duration="4.7s" />
+          <FlamePlume left="20%" delay="0.8s"  scale={0.88} heightPct={74}  duration="3.9s" />
+          <FlamePlume left="32%" delay="-2.1s" scale={1.02} heightPct={88}  duration="5.3s" />
+          <FlamePlume left="44%" delay="0.35s" scale={1.08} heightPct={96}  duration="3.3s" />
+          <FlamePlume left="56%" delay="-1.7s" scale={1.12} heightPct={100} duration="4.1s" />
+          <FlamePlume left="68%" delay="1.15s" scale={1.0}  heightPct={90}  duration="3.6s" />
+          <FlamePlume left="80%" delay="-0.55s" scale={0.9} heightPct={76}  duration="4.9s" />
+          <FlamePlume left="92%" delay="1.4s"  scale={0.8}  heightPct={64}  duration="5.7s" />
         </div>
       )}
       {/* Hot coal glow strip at the very bottom */}
