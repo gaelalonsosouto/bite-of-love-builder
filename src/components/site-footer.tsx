@@ -34,7 +34,7 @@ export function SiteFooter() {
       <div className="border-t border-border/60">
         <div className="container-x py-6 text-xs text-cream/40 flex flex-wrap gap-2 justify-between">
           <span>© {new Date().getFullYear()} Franky&apos;s Burger. Todos los derechos reservados.</span>
-          <span>A Coruña · Cerca de Riazor</span>
+          <span>A Coruña ·&nbsp;15004</span>
         </div>
       </div>
     </footer>
