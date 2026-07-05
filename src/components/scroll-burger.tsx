@@ -65,7 +65,7 @@ export function ScrollBurger() {
       />
       <div
         key={entryKey}
-        className="absolute top-1/2 right-[8%] md:right-[12%] w-[70vw] max-w-[460px] md:w-[36vw] md:max-w-[560px] burger-drop-in"
+        className="absolute top-1/2 left-1/2 md:left-auto md:right-[12%] w-[70vw] max-w-[460px] md:w-[36vw] md:max-w-[560px] burger-drop-in"
       >
         <img
           src={BURGER_URL}

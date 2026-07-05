@@ -175,24 +175,36 @@
   animation: burger-drop 700ms cubic-bezier(0.34, 1.2, 0.64, 1) 0.25s both;
 }
 
-/* Flames background — layered animated blobs simulating fire plumes */
-@keyframes flame-flicker {
-  0%, 100% {
-    transform: translate(-50%, 0) scale(1.05, 0.95) rotate(-6deg) skewX(-4deg);
-    opacity: 0.95;
-  }
-  20% {
-    transform: translate(-50%, -1%) scale(1.15, 1.05) rotate(6deg) skewX(5deg);
-    opacity: 1;
-  }
-  45% {
-    transform: translate(-50%, -2%) scale(0.95, 1.15) rotate(-8deg) skewX(-6deg);
-    opacity: 0.9;
-  }
-  70% {
-    transform: translate(-50%, -1%) scale(1.2, 0.95) rotate(5deg) skewX(7deg);
-    opacity: 1;
-  }
+/* Flames background — layered animated blobs simulating fire plumes.
+   Each layer has its own keyframes and non-harmonic duration so the plumes
+   never sync back into a visible loop. */
+@keyframes flame-outer {
+  0%   { transform: translate(-50%, 0)    scale(1.02, 0.96) rotate(-3deg) skewX(-2deg); opacity: 0.78; }
+  17%  { transform: translate(-51%, -1%)  scale(1.14, 1.02) rotate(4deg)  skewX(4deg);  opacity: 0.9; }
+  33%  { transform: translate(-49%, -2%)  scale(0.94, 1.12) rotate(-6deg) skewX(-5deg); opacity: 0.72; }
+  52%  { transform: translate(-50%, -1%)  scale(1.18, 0.98) rotate(5deg)  skewX(6deg);  opacity: 0.88; }
+  71%  { transform: translate(-51%, -2%)  scale(1.0, 1.08)  rotate(-4deg) skewX(-3deg); opacity: 0.82; }
+  88%  { transform: translate(-49%, -1%)  scale(1.08, 0.94) rotate(2deg)  skewX(3deg);  opacity: 0.86; }
+  100% { transform: translate(-50%, 0)    scale(1.02, 0.96) rotate(-3deg) skewX(-2deg); opacity: 0.78; }
+}
+@keyframes flame-mid {
+  0%   { transform: translate(-50%, 0)    scale(1.0, 1.0)   rotate(-5deg) skewX(-3deg); opacity: 0.9; }
+  14%  { transform: translate(-52%, -2%)  scale(1.1, 1.14)  rotate(6deg)  skewX(5deg);  opacity: 1; }
+  29%  { transform: translate(-48%, -4%)  scale(0.86, 1.24) rotate(-9deg) skewX(-6deg); opacity: 0.75; }
+  46%  { transform: translate(-51%, -3%)  scale(1.22, 1.02) rotate(7deg)  skewX(8deg);  opacity: 0.95; }
+  63%  { transform: translate(-49%, -5%)  scale(0.94, 1.2)  rotate(-5deg) skewX(-4deg); opacity: 0.82; }
+  81%  { transform: translate(-51%, -3%)  scale(1.16, 0.98) rotate(4deg)  skewX(5deg);  opacity: 0.92; }
+  100% { transform: translate(-50%, 0)    scale(1.0, 1.0)   rotate(-5deg) skewX(-3deg); opacity: 0.9; }
+}
+@keyframes flame-core {
+  0%   { transform: translate(-50%, 0)    scale(0.95, 1.05) rotate(-2deg); opacity: 0.9; }
+  11%  { transform: translate(-53%, -4%)  scale(1.12, 1.2)  rotate(8deg);  opacity: 1; }
+  24%  { transform: translate(-47%, -8%)  scale(0.78, 1.32) rotate(-10deg); opacity: 0.7; }
+  38%  { transform: translate(-52%, -5%)  scale(1.24, 1.06) rotate(9deg);  opacity: 0.95; }
+  55%  { transform: translate(-48%, -9%)  scale(0.86, 1.28) rotate(-7deg); opacity: 0.78; }
+  72%  { transform: translate(-51%, -4%)  scale(1.18, 0.98) rotate(5deg);  opacity: 0.9; }
+  89%  { transform: translate(-49%, -6%)  scale(0.92, 1.16) rotate(-4deg); opacity: 0.82; }
+  100% { transform: translate(-50%, 0)    scale(0.95, 1.05) rotate(-2deg); opacity: 0.9; }
 }
 .flame-plume {
   mix-blend-mode: screen;
@@ -204,7 +216,8 @@
   /* Organic teardrop tongue — no hard corners at the top. */
   border-radius: 50% 50% 45% 45% / 95% 95% 12% 12%;
   transform-origin: 50% 100%;
-  animation: flame-flicker 1.4s ease-in-out infinite;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+  animation-iteration-count: infinite;
 }
 .flame-outer {
   width: 140%;
@@ -215,8 +228,9 @@
     oklch(0.35 0.18 22 / 0.22) 70%,
     transparent 85%);
   filter: blur(18px);
-  animation-duration: calc(var(--plume-duration, 1.8s) * 1.15);
-  animation-delay: calc(var(--plume-delay, 0s) + 0.05s);
+  animation-name: flame-outer;
+  animation-duration: calc(var(--plume-duration, 4s) * 1.35);
+  animation-delay: calc(var(--plume-delay, 0s) + 0.15s);
 }
 .flame-mid {
   width: 75%;
@@ -227,8 +241,9 @@
     oklch(0.55 0.24 28 / 0.3) 78%,
     transparent 95%);
   filter: blur(12px);
-  animation-duration: calc(var(--plume-duration, 1.2s) * 0.9);
-  animation-delay: calc(var(--plume-delay, 0s) + 0.17s);
+  animation-name: flame-mid;
+  animation-duration: calc(var(--plume-duration, 4s) * 0.83);
+  animation-delay: calc(var(--plume-delay, 0s) + 0.42s);
 }
 .flame-core {
   width: 38%;
@@ -239,8 +254,9 @@
     oklch(0.78 0.24 55 / 0.45) 70%,
     transparent 95%);
   filter: blur(7px);
-  animation-duration: calc(var(--plume-duration, 1.2s) * 0.65);
-  animation-delay: calc(var(--plume-delay, 0s) - 0.08s);
+  animation-name: flame-core;
+  animation-duration: calc(var(--plume-duration, 4s) * 0.61);
+  animation-delay: calc(var(--plume-delay, 0s) - 0.23s);
   z-index: 2;
 }
 
