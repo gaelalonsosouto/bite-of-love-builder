@@ -175,18 +175,6 @@
   animation: burger-drop 700ms cubic-bezier(0.34, 1.2, 0.64, 1) 0.25s both;
 }
 
-/* Mobile burger: GPU-only continuous spin. No scroll listener, no per-frame
-   React work — keeps older devices smooth. */
-@keyframes burger-spin-mobile {
-  from { transform: translate(-50%, -50%) rotate(-25deg); }
-  to   { transform: translate(-50%, -50%) rotate(-385deg); }
-}
-.burger-spin-mobile {
-  transform-origin: center;
-  animation: burger-spin-mobile 28s linear infinite;
-  will-change: transform;
-}
-
 /* Flames background — layered animated blobs simulating fire plumes.
    Each layer has its own keyframes and non-harmonic duration so the plumes
    never sync back into a visible loop. */
