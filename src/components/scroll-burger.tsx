@@ -13,6 +13,17 @@ const BURGER_URL = burgerAsset.url;
 export function ScrollBurger() {
   const reduce = useReducedMotion();
   const [progress, setProgress] = useState(0);
+  // On low-power / small screens (phones), skip the per-scroll JS rotation and
+  // let a CSS animation handle the spin — mid-tier and older phones stutter
+  // when React re-renders on every scroll frame.
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px), (pointer: coarse)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener?.("change", update);
+    return () => mq.removeEventListener?.("change", update);
+  }, []);
   const location = useLocation();
   // Re-key on every navigation to /, so the fall-in replays every time the
   // user lands on or returns to the home page.
@@ -22,7 +33,7 @@ export function ScrollBurger() {
   }, [location.pathname]);
 
   useEffect(() => {
-    if (reduce) return;
+    if (reduce || isMobile) return;
     let raf = 0;
     const update = () => {
       const doc = document.documentElement;
@@ -41,7 +52,7 @@ export function ScrollBurger() {
       window.removeEventListener("resize", onScroll);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, [reduce]);
+  }, [reduce, isMobile]);
 
   // 2D rotation only — counterclockwise as the user scrolls. No perspective
   // distortion so the burger keeps its shape.
@@ -70,13 +81,25 @@ export function ScrollBurger() {
         <img
           src={BURGER_URL}
           alt=""
-          style={{
-            transform: `translate(-50%, -50%) rotate(${rotZ}deg) scale(${scale})`,
-            willChange: "transform",
-            filter:
-              "drop-shadow(0 40px 60px oklch(0 0 0 / 0.8)) drop-shadow(0 0 80px oklch(0.6 0.24 45 / 0.35))",
-          }}
-          className="block w-full"
+          style={
+            isMobile
+              ? {
+                  // Mobile: GPU-only CSS spin, no scroll listener, no per-frame React work.
+                  filter:
+                    "drop-shadow(0 40px 60px oklch(0 0 0 / 0.8)) drop-shadow(0 0 80px oklch(0.6 0.24 45 / 0.35))",
+                }
+              : {
+                  transform: `translate(-50%, -50%) rotate(${rotZ}deg) scale(${scale})`,
+                  willChange: "transform",
+                  filter:
+                    "drop-shadow(0 40px 60px oklch(0 0 0 / 0.8)) drop-shadow(0 0 80px oklch(0.6 0.24 45 / 0.35))",
+                }
+          }
+          className={
+            isMobile
+              ? "block w-full burger-spin-mobile"
+              : "block w-full"
+          }
         />
       </div>
       {/* vignette to keep contrast for content */}
