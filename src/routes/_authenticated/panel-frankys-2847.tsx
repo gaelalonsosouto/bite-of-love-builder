@@ -480,7 +480,7 @@ type ItemDraft = {
   nombre: string;
   precio: string; // string in form, parse on save
   descripcion: string;
-  etiquetas: string; // comma-separated in form
+  etiquetas: string[];
   imagen_url: string;
 };
 
@@ -488,7 +488,7 @@ const EMPTY_DRAFT: ItemDraft = {
   nombre: "",
   precio: "",
   descripcion: "",
-  etiquetas: "",
+  etiquetas: [],
   imagen_url: "",
 };
 
