@@ -63,7 +63,7 @@ function CartaPage() {
             La <span className="text-tomato">carta.</span>
           </h1>
           <p className="mt-6 text-lg text-cream/70 max-w-xl">
-            Todo pasa por la plancha caliente y el pan brioche. Elige tu mordida.
+            Calidad en cada bocado.
           </p>
         </section>
 
