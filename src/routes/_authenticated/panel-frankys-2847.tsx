@@ -927,14 +927,12 @@ function ItemDialog({
 
           <div>
             <Label htmlFor="etiquetas" className="text-sm">Etiquetas (opcional)</Label>
-            <Input
-              id="etiquetas"
+            <TagsInput
               value={draft.etiquetas}
-              placeholder="Ej: Picante, La de la casa, 18+"
-              onChange={(e) => set("etiquetas", e.target.value)}
+              onChange={(next) => set("etiquetas", next)}
             />
             <p className="text-[10px] text-muted-foreground mt-1">
-              Separa varias etiquetas con comas. Pon <b>AGOTADO</b> para tachar el producto en la carta y marcarlo como no disponible.
+              Escribe una etiqueta y pulsa <b>Enter</b> (o coma) para añadirla. Haz clic en la <b>×</b> para quitarla. Pon <b>AGOTADO</b> para tachar el producto en la carta y marcarlo como no disponible.
             </p>
           </div>
         </div>
