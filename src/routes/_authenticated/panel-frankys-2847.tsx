@@ -755,6 +755,75 @@ function CategoriaPanel({
 }
 
 function ItemDialog({
+  // placeholder
+}: never): never;
+
+function TagsInput({
+  value,
+  onChange,
+}: {
+  value: string[];
+  onChange: (next: string[]) => void;
+}) {
+  const [input, setInput] = useState("");
+
+  function commit(raw: string) {
+    const parts = raw
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+    if (parts.length === 0) return;
+    const next = [...value];
+    for (const p of parts) {
+      if (!next.some((t) => t.toLowerCase() === p.toLowerCase())) next.push(p);
+    }
+    onChange(next);
+    setInput("");
+  }
+
+  function remove(tag: string) {
+    onChange(value.filter((t) => t !== tag));
+  }
+
+  return (
+    <div className="flex flex-wrap items-center gap-2 rounded-md border border-input bg-background px-2 py-2 focus-within:ring-2 focus-within:ring-ring">
+      {value.map((tag) => (
+        <span
+          key={tag}
+          className="inline-flex items-center gap-1 text-xs uppercase tracking-widest bg-tomato/20 text-tomato border border-tomato/40 px-2 py-0.5 rounded-full"
+        >
+          {tag}
+          <button
+            type="button"
+            onClick={() => remove(tag)}
+            className="hover:text-tomato/70"
+            aria-label={`Quitar ${tag}`}
+          >
+            ×
+          </button>
+        </span>
+      ))}
+      <input
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === ",") {
+            e.preventDefault();
+            commit(input);
+          } else if (e.key === "Backspace" && input === "" && value.length > 0) {
+            e.preventDefault();
+            remove(value[value.length - 1]);
+          }
+        }}
+        onBlur={() => commit(input)}
+        placeholder={value.length === 0 ? "Ej: Picante, AGOTADO, 18+" : ""}
+        className="flex-1 min-w-[8ch] bg-transparent outline-none text-sm py-1"
+      />
+    </div>
+  );
+}
+
+function ItemDialog({
   open,
   categoriaId,
   categoriaNombre,
