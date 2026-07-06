@@ -754,10 +754,6 @@ function CategoriaPanel({
   );
 }
 
-function ItemDialog({
-  // placeholder
-}: never): never;
-
 function TagsInput({
   value,
   onChange,
