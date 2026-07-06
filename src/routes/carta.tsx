@@ -82,9 +82,6 @@ function CartaPage() {
                   )}
                 </div>
               </Reveal>
-              {cat.nota && (
-                <p className="text-sm text-cream/50 mb-8 italic">{cat.nota}</p>
-              )}
               <ul className="grid md:grid-cols-2 gap-6">
                 {cat.items.map((item) => {
                   const sold = item.etiqueta === "AGOTADO";
