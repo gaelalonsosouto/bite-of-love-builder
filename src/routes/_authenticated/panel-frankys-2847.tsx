@@ -480,7 +480,7 @@ type ItemDraft = {
   nombre: string;
   precio: string; // string in form, parse on save
   descripcion: string;
-  etiqueta: string;
+  etiquetas: string; // comma-separated in form
   imagen_url: string;
 };
 
@@ -488,7 +488,7 @@ const EMPTY_DRAFT: ItemDraft = {
   nombre: "",
   precio: "",
   descripcion: "",
-  etiqueta: "",
+  etiquetas: "",
   imagen_url: "",
 };
 
@@ -680,11 +680,14 @@ function CategoriaPanel({
                   <span className="text-tomato font-display">
                     {it.precio != null ? `${it.precio.toFixed(2)} €` : "—"}
                   </span>
-                  {it.etiqueta && (
-                    <span className="text-[10px] uppercase tracking-widest bg-tomato/20 text-tomato border border-tomato/40 px-2 py-0.5 rounded-full">
-                      {it.etiqueta}
+                  {(it.etiquetas ?? []).map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-[10px] uppercase tracking-widest bg-tomato/20 text-tomato border border-tomato/40 px-2 py-0.5 rounded-full"
+                    >
+                      {tag}
                     </span>
-                  )}
+                  ))}
                 </div>
                 {it.descripcion && (
                   <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
@@ -774,7 +777,7 @@ function ItemDialog({
           nombre: item.nombre,
           precio: item.precio != null ? String(item.precio) : "",
           descripcion: item.descripcion ?? "",
-          etiqueta: item.etiqueta ?? "",
+          etiquetas: (item.etiquetas ?? []).join(", "),
           imagen_url: item.imagen_url ?? "",
         }
       : EMPTY_DRAFT,
@@ -817,12 +820,16 @@ function ItemDialog({
       return;
     }
     setSaving(true);
+    const etiquetasArr = draft.etiquetas
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
     const payload = {
       categoria_id: categoriaId,
       nombre: draft.nombre.trim(),
       precio: precioNum,
       descripcion: draft.descripcion,
-      etiqueta: draft.etiqueta.trim() || null,
+      etiquetas: etiquetasArr,
       imagen_url: draft.imagen_url || null,
     };
     if (item) {
@@ -922,15 +929,15 @@ function ItemDialog({
           </div>
 
           <div>
-            <Label htmlFor="etiqueta" className="text-sm">Etiqueta (opcional)</Label>
+            <Label htmlFor="etiquetas" className="text-sm">Etiquetas (opcional)</Label>
             <Input
-              id="etiqueta"
-              value={draft.etiqueta}
-              placeholder="Ej: Picante · La de la casa · 18+ · AGOTADO"
-              onChange={(e) => set("etiqueta", e.target.value)}
+              id="etiquetas"
+              value={draft.etiquetas}
+              placeholder="Ej: Picante, La de la casa, 18+"
+              onChange={(e) => set("etiquetas", e.target.value)}
             />
             <p className="text-[10px] text-muted-foreground mt-1">
-              Pon <b>AGOTADO</b> para tachar el producto en la carta y marcarlo como no disponible.
+              Separa varias etiquetas con comas. Pon <b>AGOTADO</b> para tachar el producto en la carta y marcarlo como no disponible.
             </p>
           </div>
         </div>

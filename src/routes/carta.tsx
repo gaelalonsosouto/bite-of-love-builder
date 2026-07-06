@@ -32,13 +32,14 @@ export const Route = createFileRoute("/carta")({
 function CartaPage() {
   const { data: categories } = useSuspenseQuery(cartaQueryOptions);
   const cursorFor = (item: MenuItem): string => {
-    if (item.etiqueta === "AGOTADO") return "cursor-not-allowed";
-    if (item.etiqueta === "18+") return "cursor-18";
-    if (item.etiqueta === "Picante") return "cursor-chili";
+    const tags = item.etiquetas ?? [];
+    if (tags.includes("AGOTADO")) return "cursor-not-allowed";
+    if (tags.includes("18+")) return "cursor-18";
+    if (tags.includes("Picante")) return "cursor-chili";
     if (
-      item.etiqueta === "La de la casa" ||
-      item.etiqueta === "Solo para valientes" ||
-      item.etiqueta === "Para compartir"
+      tags.includes("La de la casa") ||
+      tags.includes("Solo para valientes") ||
+      tags.includes("Para compartir")
     ) {
       return "cursor-fire";
     }
@@ -84,7 +85,8 @@ function CartaPage() {
               </Reveal>
               <ul className="grid md:grid-cols-2 gap-6">
                 {cat.items.map((item) => {
-                  const sold = item.etiqueta === "AGOTADO";
+                  const tags = item.etiquetas ?? [];
+                  const sold = tags.includes("AGOTADO");
                   return (
                   <li
                     key={item.id}
@@ -105,13 +107,8 @@ function CartaPage() {
                         <div className="flex items-baseline justify-between gap-3">
                           <h3 className={`font-display text-xl md:text-2xl ${sold ? "text-cream/50 line-through decoration-cream/40" : "text-cream group-hover:text-tomato transition-colors"}`}>
                             {item.nombre}
-                            {item.etiqueta === "Picante" && (
+                            {tags.includes("Picante") && (
                               <Flame className="inline-block ml-2 text-tomato" size={20} />
-                            )}
-                            {sold && (
-                              <span className="ml-2 text-sm md:text-base font-sans not-italic no-underline text-cream/60 align-middle">
-                                (agotado)
-                              </span>
                             )}
                           </h3>
                           <span className="flex-1 border-b border-dashed border-cream/20 translate-y-[-4px]" />
@@ -122,11 +119,16 @@ function CartaPage() {
                         <p className={`mt-2 text-sm leading-relaxed ${sold ? "text-cream/40 line-through decoration-cream/30" : "text-cream/60"}`}>
                           {item.descripcion}
                         </p>
-                        {item.etiqueta && (
+                        {tags.length > 0 && (
                           <div className="mt-3 flex gap-2 flex-wrap">
-                            <span className={`inline-block text-[10px] uppercase tracking-widest px-2 py-1 rounded-full ${sold ? "bg-cream/10 text-cream/60 border border-cream/20" : "bg-tomato/20 text-tomato border border-tomato/40"}`}>
-                              {item.etiqueta}
-                            </span>
+                            {tags.map((tag) => (
+                              <span
+                                key={tag}
+                                className={`inline-block text-[10px] uppercase tracking-widest px-2 py-1 rounded-full ${sold ? "bg-cream/10 text-cream/60 border border-cream/20" : "bg-tomato/20 text-tomato border border-tomato/40"}`}
+                              >
+                                {tag}
+                              </span>
+                            ))}
                           </div>
                         )}
                       </div>
