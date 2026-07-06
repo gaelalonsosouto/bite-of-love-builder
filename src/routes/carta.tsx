@@ -77,7 +77,7 @@ function CartaPage() {
                   </h2>
                   {cat.nota && (
                     <span className="hidden md:inline text-xs uppercase tracking-widest text-cream/40">
-                      Pendiente
+                      {cat.nota}
                     </span>
                   )}
                 </div>
