@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
-import justEatLogo from "@/assets/just-eat-logo.png.asset.json";
+import justEatLogo from "@/assets/just-eat-logo.png";
 
 const JUST_EAT_URL = "https://www.just-eat.es/restaurants-frankys-burger-a-coruna/menu";
 
@@ -41,7 +41,7 @@ export function SiteHeader() {
             style={{ backgroundColor: "#FF8000" }}
             className="hover-glow inline-flex items-center gap-2 text-white px-4 py-2 rounded-full text-xs sm:text-sm font-semibold"
           >
-            <img src={justEatLogo.url} alt="Just Eat delivery service logo" width={20} height={20} className="shrink-0" />
+            <img src={justEatLogo} alt="Just Eat delivery service logo" width={20} height={20} className="shrink-0" />
             Pedir en Just Eat
           </a>
         </nav>
@@ -84,7 +84,7 @@ export function SiteHeader() {
               style={{ backgroundColor: "#FF8000" }}
               className="hover-glow mt-2 mb-1 inline-flex items-center justify-center gap-2 text-white px-4 py-3 rounded-full text-sm font-semibold"
             >
-              <img src={justEatLogo.url} alt="Just Eat delivery service logo" width={20} height={20} className="shrink-0" />
+              <img src={justEatLogo} alt="Just Eat delivery service logo" width={20} height={20} className="shrink-0" />
               Pedir en Just Eat
             </a>
           </nav>
