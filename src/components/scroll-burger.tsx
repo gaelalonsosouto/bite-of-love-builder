@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useReducedMotion } from "motion/react";
 import { useLocation } from "@tanstack/react-router";
-import burgerAsset from "@/assets/smash-burger.png";
+import burgerAsset from "@/assets/smash-burger.webp";
 
 /**
  * Fixed 3D-rotating burger that spins in place as the user scrolls, inspired
