@@ -480,7 +480,7 @@ type ItemDraft = {
   nombre: string;
   precio: string; // string in form, parse on save
   descripcion: string;
-  etiquetas: string[];
+  etiquetas: string; // comma-separated in form
   imagen_url: string;
 };
 
@@ -488,7 +488,7 @@ const EMPTY_DRAFT: ItemDraft = {
   nombre: "",
   precio: "",
   descripcion: "",
-  etiquetas: [],
+  etiquetas: "",
   imagen_url: "",
 };
 
@@ -754,71 +754,6 @@ function CategoriaPanel({
   );
 }
 
-function TagsInput({
-  value,
-  onChange,
-}: {
-  value: string[];
-  onChange: (next: string[]) => void;
-}) {
-  const [input, setInput] = useState("");
-
-  function commit(raw: string) {
-    const parts = raw
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean);
-    if (parts.length === 0) return;
-    const next = [...value];
-    for (const p of parts) {
-      if (!next.some((t) => t.toLowerCase() === p.toLowerCase())) next.push(p);
-    }
-    onChange(next);
-    setInput("");
-  }
-
-  function remove(tag: string) {
-    onChange(value.filter((t) => t !== tag));
-  }
-
-  return (
-    <div className="flex flex-wrap items-center gap-2 rounded-md border border-input bg-background px-2 py-2 focus-within:ring-2 focus-within:ring-ring">
-      {value.map((tag) => (
-        <span
-          key={tag}
-          className="inline-flex items-center gap-1 text-xs uppercase tracking-widest bg-tomato/20 text-tomato border border-tomato/40 px-2 py-0.5 rounded-full"
-        >
-          {tag}
-          <button
-            type="button"
-            onClick={() => remove(tag)}
-            className="hover:text-tomato/70"
-            aria-label={`Quitar ${tag}`}
-          >
-            ×
-          </button>
-        </span>
-      ))}
-      <input
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === ",") {
-            e.preventDefault();
-            commit(input);
-          } else if (e.key === "Backspace" && input === "" && value.length > 0) {
-            e.preventDefault();
-            remove(value[value.length - 1]);
-          }
-        }}
-        onBlur={() => commit(input)}
-        placeholder={value.length === 0 ? "Ej: Picante, AGOTADO, 18+" : ""}
-        className="flex-1 min-w-[8ch] bg-transparent outline-none text-sm py-1"
-      />
-    </div>
-  );
-}
-
 function ItemDialog({
   open,
   categoriaId,
@@ -842,7 +777,7 @@ function ItemDialog({
           nombre: item.nombre,
           precio: item.precio != null ? String(item.precio) : "",
           descripcion: item.descripcion ?? "",
-          etiquetas: item.etiquetas ?? [],
+          etiquetas: (item.etiquetas ?? []).join(", "),
           imagen_url: item.imagen_url ?? "",
         }
       : EMPTY_DRAFT,
@@ -885,7 +820,10 @@ function ItemDialog({
       return;
     }
     setSaving(true);
-    const etiquetasArr = draft.etiquetas.map((s) => s.trim()).filter(Boolean);
+    const etiquetasArr = draft.etiquetas
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
     const payload = {
       categoria_id: categoriaId,
       nombre: draft.nombre.trim(),
@@ -992,12 +930,14 @@ function ItemDialog({
 
           <div>
             <Label htmlFor="etiquetas" className="text-sm">Etiquetas (opcional)</Label>
-            <TagsInput
+            <Input
+              id="etiquetas"
               value={draft.etiquetas}
-              onChange={(next) => set("etiquetas", next)}
+              placeholder="Ej: Picante, La de la casa, 18+"
+              onChange={(e) => set("etiquetas", e.target.value)}
             />
             <p className="text-[10px] text-muted-foreground mt-1">
-              Escribe una etiqueta y pulsa <b>Enter</b> (o coma) para añadirla. Haz clic en la <b>×</b> para quitarla. Pon <b>AGOTADO</b> para tachar el producto en la carta y marcarlo como no disponible.
+              Separa varias etiquetas con comas. Pon <b>AGOTADO</b> para tachar el producto en la carta y marcarlo como no disponible.
             </p>
           </div>
         </div>
