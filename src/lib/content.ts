@@ -23,7 +23,7 @@ export type MenuItem = {
   precio: number | null;
   descripcion: string;
   imagen_url: string | null;
-  etiqueta: string | null;
+  etiquetas: string[];
   orden: number;
 };
 
@@ -67,7 +67,7 @@ export const cartaQueryOptions = queryOptions({
       supabase.from("menu_categorias").select("id, nombre, orden, nota").order("orden"),
       supabase
         .from("menu_items")
-        .select("id, categoria_id, nombre, precio, descripcion, imagen_url, etiqueta, orden")
+        .select("id, categoria_id, nombre, precio, descripcion, imagen_url, etiquetas, orden")
         .order("orden"),
     ]);
     if (catsRes.error) throw catsRes.error;
