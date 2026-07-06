@@ -494,12 +494,43 @@ const EMPTY_DRAFT: ItemDraft = {
 
 function CartaAdmin({ categorias }: { categorias: MenuCategoria[] }) {
   const first = categorias[0]?.id ?? "";
+  const qc = useQueryClient();
+  const [creatingCat, setCreatingCat] = useState(false);
+  const [editingCat, setEditingCat] = useState<MenuCategoria | null>(null);
+  const [deletingCat, setDeletingCat] = useState<MenuCategoria | null>(null);
+
+  async function refetch() {
+    await qc.invalidateQueries({ queryKey: ["carta"] });
+  }
+
+  async function handleDeleteCat() {
+    if (!deletingCat) return;
+    const { error } = await supabase
+      .from("menu_categorias")
+      .delete()
+      .eq("id", deletingCat.id);
+    if (error) {
+      toast.error(`Error al eliminar categoría: ${error.message}`);
+      return;
+    }
+    toast.success("Categoría eliminada.");
+    setDeletingCat(null);
+    await refetch();
+  }
+
   return (
     <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
-      <h2 className="font-display text-xl mb-1">Carta</h2>
-      <p className="text-xs text-muted-foreground uppercase tracking-widest mb-6">
-        Gestiona los productos de cada categoría
-      </p>
+      <div className="flex items-start justify-between mb-6 gap-4 flex-wrap">
+        <div>
+          <h2 className="font-display text-xl mb-1">Carta</h2>
+          <p className="text-xs text-muted-foreground uppercase tracking-widest">
+            Gestiona las categorías y los productos de la carta
+          </p>
+        </div>
+        <Button onClick={() => setCreatingCat(true)} variant="outline">
+          <Plus className="mr-1" /> Nueva categoría
+        </Button>
+      </div>
       <Tabs defaultValue={first} orientation="vertical" className="flex flex-col md:flex-row gap-6">
         <TabsList className="md:flex-col md:h-auto md:items-stretch md:bg-muted/40 md:p-2 flex-wrap">
           {categorias.map((c) => (
@@ -516,16 +547,68 @@ function CartaAdmin({ categorias }: { categorias: MenuCategoria[] }) {
         <div className="flex-1 min-w-0">
           {categorias.map((c) => (
             <TabsContent key={c.id} value={c.id} className="mt-0">
-              <CategoriaPanel categoria={c} />
+              <CategoriaPanel
+                categoria={c}
+                onEditCategoria={() => setEditingCat(c)}
+                onDeleteCategoria={() => setDeletingCat(c)}
+              />
             </TabsContent>
           ))}
         </div>
       </Tabs>
+
+      {(creatingCat || editingCat) && (
+        <CategoriaDialog
+          open
+          categoria={editingCat}
+          nextOrden={
+            categorias.length ? Math.max(...categorias.map((c) => c.orden)) + 1 : 0
+          }
+          onClose={() => {
+            setCreatingCat(false);
+            setEditingCat(null);
+          }}
+          onSaved={async () => {
+            setCreatingCat(false);
+            setEditingCat(null);
+            await refetch();
+          }}
+        />
+      )}
+
+      <AlertDialog open={!!deletingCat} onOpenChange={(o) => !o && setDeletingCat(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Eliminar categoría "{deletingCat?.nombre}"?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Se eliminarán también <b>{deletingCat?.items.length ?? 0}</b> producto(s) de
+              esta categoría. Esta acción no se puede deshacer.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteCat}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Eliminar categoría
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
 
-function CategoriaPanel({ categoria }: { categoria: MenuCategoria }) {
+function CategoriaPanel({
+  categoria,
+  onEditCategoria,
+  onDeleteCategoria,
+}: {
+  categoria: MenuCategoria;
+  onEditCategoria: () => void;
+  onDeleteCategoria: () => void;
+}) {
   const [editing, setEditing] = useState<MenuItem | null>(null);
   const [creating, setCreating] = useState(false);
   const [deleting, setDeleting] = useState<MenuItem | null>(null);
@@ -556,9 +639,17 @@ function CategoriaPanel({ categoria }: { categoria: MenuCategoria }) {
             <p className="text-xs text-muted-foreground italic">{categoria.nota}</p>
           )}
         </div>
-        <Button onClick={() => setCreating(true)}>
-          <Plus className="mr-1" /> Añadir producto
-        </Button>
+        <div className="flex gap-2 flex-wrap">
+          <Button variant="outline" size="sm" onClick={onEditCategoria}>
+            <Pencil /> Editar categoría
+          </Button>
+          <Button variant="destructive" size="sm" onClick={onDeleteCategoria}>
+            <Trash2 /> Eliminar categoría
+          </Button>
+          <Button onClick={() => setCreating(true)}>
+            <Plus className="mr-1" /> Añadir producto
+          </Button>
+        </div>
       </div>
 
       {categoria.items.length === 0 ? (
