@@ -926,9 +926,12 @@ function ItemDialog({
             <Input
               id="etiqueta"
               value={draft.etiqueta}
-              placeholder="Ej: Picante · La de la casa · 18+"
+              placeholder="Ej: Picante · La de la casa · 18+ · AGOTADO"
               onChange={(e) => set("etiqueta", e.target.value)}
             />
+            <p className="text-[10px] text-muted-foreground mt-1">
+              Pon <b>AGOTADO</b> para tachar el producto en la carta y marcarlo como no disponible.
+            </p>
           </div>
         </div>
 
@@ -938,6 +941,95 @@ function ItemDialog({
           </Button>
           <Button onClick={onSave} disabled={saving || uploading}>
             {saving ? "Guardando…" : item ? "Guardar cambios" : "Crear producto"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function CategoriaDialog({
+  open,
+  categoria,
+  nextOrden,
+  onClose,
+  onSaved,
+}: {
+  open: boolean;
+  categoria: MenuCategoria | null;
+  nextOrden: number;
+  onClose: () => void;
+  onSaved: () => void | Promise<void>;
+}) {
+  const [nombre, setNombre] = useState(categoria?.nombre ?? "");
+  const [nota, setNota] = useState(categoria?.nota ?? "");
+  const [saving, setSaving] = useState(false);
+
+  async function onSave() {
+    if (!nombre.trim()) {
+      toast.error("El nombre es obligatorio.");
+      return;
+    }
+    setSaving(true);
+    const payload = { nombre: nombre.trim(), nota: nota.trim() || null };
+    if (categoria) {
+      const { error } = await supabase
+        .from("menu_categorias")
+        .update(payload)
+        .eq("id", categoria.id);
+      if (error) {
+        toast.error(`Error al guardar: ${error.message}`);
+        setSaving(false);
+        return;
+      }
+      toast.success("Categoría actualizada.");
+    } else {
+      const { error } = await supabase
+        .from("menu_categorias")
+        .insert({ ...payload, orden: nextOrden });
+      if (error) {
+        toast.error(`Error al crear: ${error.message}`);
+        setSaving(false);
+        return;
+      }
+      toast.success("Categoría creada.");
+    }
+    setSaving(false);
+    await onSaved();
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle>{categoria ? "Editar categoría" : "Nueva categoría"}</DialogTitle>
+        </DialogHeader>
+        <div className="grid gap-4">
+          <div>
+            <Label htmlFor="cat-nombre" className="text-sm">Nombre</Label>
+            <Input
+              id="cat-nombre"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              placeholder="Ej: Postres"
+            />
+          </div>
+          <div>
+            <Label htmlFor="cat-nota" className="text-sm">Nota (opcional)</Label>
+            <Input
+              id="cat-nota"
+              value={nota}
+              onChange={(e) => setNota(e.target.value)}
+              placeholder="Texto pequeño bajo el título"
+            />
+          </div>
+        </div>
+        <DialogFooter>
+          <Button variant="ghost" onClick={onClose} disabled={saving}>
+            Cancelar
+          </Button>
+          <Button onClick={onSave} disabled={saving}>
+            {saving ? "Guardando…" : categoria ? "Guardar cambios" : "Crear categoría"}
           </Button>
         </DialogFooter>
       </DialogContent>
