@@ -777,7 +777,7 @@ function ItemDialog({
           nombre: item.nombre,
           precio: item.precio != null ? String(item.precio) : "",
           descripcion: item.descripcion ?? "",
-          etiquetas: (item.etiquetas ?? []).join(", "),
+          etiquetas: item.etiquetas ?? [],
           imagen_url: item.imagen_url ?? "",
         }
       : EMPTY_DRAFT,
@@ -820,10 +820,7 @@ function ItemDialog({
       return;
     }
     setSaving(true);
-    const etiquetasArr = draft.etiquetas
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean);
+    const etiquetasArr = draft.etiquetas.map((s) => s.trim()).filter(Boolean);
     const payload = {
       categoria_id: categoriaId,
       nombre: draft.nombre.trim(),
