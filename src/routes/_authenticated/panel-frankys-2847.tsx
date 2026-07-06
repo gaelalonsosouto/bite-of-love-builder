@@ -830,6 +830,7 @@ function ItemDialog({
       precio: precioNum,
       descripcion: draft.descripcion,
       etiquetas: etiquetasArr,
+      etiqueta: etiquetasArr.length > 0 ? etiquetasArr.join(", ") : null,
       imagen_url: draft.imagen_url || null,
     };
     if (item) {
