@@ -188,10 +188,6 @@ function Index() {
                     alt="Fachada de Franky's Burger en A Coruña con Fran y Alejandra en la puerta"
                     loading="lazy"
                     className="w-full h-auto object-cover"
-                    onError={(e) => {
-                      e.currentTarget.onerror = null;
-                      e.currentTarget.src = facade;
-                    }}
                   />
                 </div>
               </Reveal>
