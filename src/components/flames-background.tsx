@@ -86,27 +86,37 @@ export function FlamesBackground() {
           float aspect = uResolution.x / max(uResolution.y, 1.0);
           vec2 p = vec2((uv.x - 0.5) * aspect, uv.y);
 
-          float t = uTime * 0.55;
+          float t = uTime * 0.6;
 
-          // Domain warp — rising motion
+          // Stretch vertically so noise cells are tall — reads as rising tongues,
+          // not a horizontal ribbon.
+          vec2 ps = vec2(p.x * 1.6, p.y * 0.55);
+
+          // Domain warp — rising motion, stronger vertical drift
           vec2 q = vec2(
-            fbm(p * 2.2 + vec2(0.0, -t * 1.2)),
-            fbm(p * 2.2 + vec2(5.2, -t * 1.0) + 3.4)
+            fbm(ps * 2.0 + vec2(0.0, -t * 1.8)),
+            fbm(ps * 2.0 + vec2(5.2, -t * 1.6) + 3.4)
           );
           vec2 r = vec2(
-            fbm(p * 2.6 + q * 1.8 + vec2(1.7, -t * 1.6)),
-            fbm(p * 2.6 + q * 1.8 + vec2(8.3, -t * 1.4))
+            fbm(ps * 2.4 + q * 2.2 + vec2(1.7, -t * 2.4)),
+            fbm(ps * 2.4 + q * 2.2 + vec2(8.3, -t * 2.1))
           );
-          float n = fbm(p * 3.0 + r * 2.2 + vec2(0.0, -t * 1.9));
+          float n = fbm(ps * 2.8 + r * 2.6 + vec2(0.0, -t * 2.8));
 
-          // Vertical mask: flames concentrated on bottom, tongue-shaped
-          float bottom = smoothstep(0.75, 0.0, uv.y); // stronger low
-          // Extra bed of embers along the very bottom
-          float ember = smoothstep(0.30, 0.0, uv.y);
+          // Per-column "tongue" mask — high-frequency variation across x so
+          // some columns push flames much higher than others (no flat top).
+          float tongue = fbm(vec2(p.x * 3.2, -t * 0.6)) * 0.5 + 0.5;
+          float peak = mix(0.55, 1.15, tongue); // tallest columns reach ~top
 
-          // Flame body: subtract vertical gradient so tongues thin as they rise
-          float flame = (n * 0.6 + 0.55) * bottom;
-          flame -= (uv.y * 1.35);
+          // Vertical mask reaches much higher and follows the per-column peak.
+          float bottom = smoothstep(peak, 0.0, uv.y);
+          float ember = smoothstep(0.18, 0.0, uv.y);
+
+          // Flame body: subtract a gentler vertical gradient so tongues climb.
+          float flame = (n * 0.75 + 0.55) * bottom;
+          flame -= uv.y * (0.85 / max(peak, 0.4));
+          // Extra wisps at the tip driven purely by noise
+          flame += (n - 0.15) * smoothstep(0.2, 0.9, uv.y) * 0.35;
           flame = max(flame, 0.0);
 
           // Color ramp: white core -> yellow -> orange -> deep red -> smoke
@@ -126,7 +136,7 @@ export function FlamesBackground() {
           col += cOrange * ember * 0.45;
 
           // Alpha: additive-ish look via premultiplied color, but keep transparency for scroll fade
-          float alpha = clamp(flame * 1.6 + ember * 0.35, 0.0, 1.0);
+          float alpha = clamp(flame * 1.8 + ember * 0.35, 0.0, 1.0);
           alpha *= uIntensity;
           col *= uIntensity;
 
