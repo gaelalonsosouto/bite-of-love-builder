@@ -247,8 +247,14 @@ function SectionForm({
       toast.error(`No se pudo subir la imagen: ${upErr.message}`);
       return;
     }
-    const { data } = supabase.storage.from("contenido").getPublicUrl(path);
-    setValue(id, data.publicUrl);
+    const { data: signed, error: signErr } = await supabase.storage
+      .from("contenido")
+      .createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
+    if (signErr || !signed) {
+      toast.error(`No se pudo obtener la URL: ${signErr?.message ?? "desconocido"}`);
+      return;
+    }
+    setValue(id, signed.signedUrl);
     toast.success("Imagen subida. Recuerda guardar los cambios.");
   }
 
@@ -803,8 +809,15 @@ function ItemDialog({
       setUploading(false);
       return;
     }
-    const { data } = supabase.storage.from("contenido").getPublicUrl(path);
-    set("imagen_url", data.publicUrl);
+    const { data: signed, error: signErr } = await supabase.storage
+      .from("contenido")
+      .createSignedUrl(path, 60 * 60 * 24 * 365 * 10);
+    if (signErr || !signed) {
+      toast.error(`No se pudo obtener la URL: ${signErr?.message ?? "desconocido"}`);
+      setUploading(false);
+      return;
+    }
+    set("imagen_url", signed.signedUrl);
     setUploading(false);
     e.target.value = "";
   }
