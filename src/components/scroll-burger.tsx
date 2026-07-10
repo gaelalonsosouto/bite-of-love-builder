@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useReducedMotion } from "motion/react";
 import { useLocation } from "@tanstack/react-router";
-import BURGER_URL from "@/assets/smash-burger.webp";
+import burgerAsset from "@/assets/smash-burger.png.asset.json";
 
 /**
  * Fixed 3D-rotating burger that spins in place as the user scrolls, inspired
  * by the Black Cube website's rotating hero object. Perspective + rotateY +
  * rotateX + rotateZ give a coin-like tumble; no longer falls down the page.
  */
+const BURGER_URL = burgerAsset.url;
 
 export function ScrollBurger() {
   const reduce = useReducedMotion();

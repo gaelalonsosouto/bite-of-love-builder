@@ -6,8 +6,8 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ScrollBurger } from "@/components/scroll-burger";
 import { Reveal } from "@/components/reveal";
-import interior from "@/assets/frankys-interior.webp";
-import facade from "@/assets/frankys-facade.webp";
+import interior from "@/assets/frankys-interior.webp.asset.json";
+import facade from "@/assets/frankys-facade.webp.asset.json";
 import { bloquesQueryOptions, horarioQueryOptions, t } from "@/lib/content";
 
 const MAPS_URL =
@@ -30,8 +30,8 @@ export const Route = createFileRoute("/")({
 function Index() {
   const { data: bloques } = useSuspenseQuery(bloquesQueryOptions);
   const { data: schedule } = useSuspenseQuery(horarioQueryOptions);
-  const historiaImg = bloques.get("historia_imagen")?.valor || facade;
-  const comoImg = bloques.get("como_imagen_fondo")?.valor || interior;
+  const historiaImg = bloques.get("historia_imagen")?.valor || facade.url;
+  const comoImg = bloques.get("como_imagen_fondo")?.valor || interior.url;
   return (
     <div className="relative min-h-screen bg-background text-foreground overflow-x-hidden">
       <ScrollBurger />
@@ -188,9 +188,6 @@ function Index() {
                     alt="Fachada de Franky's Burger en A Coruña con Fran y Alejandra en la puerta"
                     loading="lazy"
                     className="w-full h-auto object-cover"
-                    onError={(e) => {
-                      e.currentTarget.src = facade;
-                    }}
                   />
                 </div>
               </Reveal>
