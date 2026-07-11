@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react";
 import { useReducedMotion } from "motion/react";
 import { useLocation } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import burgerAsset from "@/assets/smash-burger.png.asset.json";
+import { bloquesQueryOptions } from "@/lib/content";
 
 /**
  * Fixed 3D-rotating burger that spins in place as the user scrolls, inspired
  * by the Black Cube website's rotating hero object. Perspective + rotateY +
  * rotateX + rotateZ give a coin-like tumble; no longer falls down the page.
  */
-const BURGER_URL = burgerAsset.url;
+const DEFAULT_BURGER_URL = burgerAsset.url;
 
 export function ScrollBurger() {
   const reduce = useReducedMotion();
   const [progress, setProgress] = useState(0);
   const location = useLocation();
+  const { data: bloques } = useQuery(bloquesQueryOptions);
+  const burgerUrl = bloques?.get("efectos_burger_imagen")?.valor?.trim() || DEFAULT_BURGER_URL;
   // Re-key on every navigation to /, so the fall-in replays every time the
   // user lands on or returns to the home page.
   const [entryKey, setEntryKey] = useState(0);
@@ -68,7 +72,7 @@ export function ScrollBurger() {
         className="absolute top-1/2 left-1/2 md:left-auto md:right-[12%] w-[70vw] max-w-[460px] md:w-[36vw] md:max-w-[560px] burger-drop-in"
       >
         <img
-          src={BURGER_URL}
+          src={burgerUrl}
           alt=""
           style={{
             transform: `translate(-50%, -50%) rotate(${rotZ}deg) scale(${scale})`,
