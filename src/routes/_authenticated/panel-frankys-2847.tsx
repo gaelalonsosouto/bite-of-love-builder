@@ -46,6 +46,18 @@ type Group = {
 
 const GROUPS: Group[] = [
   {
+    key: "efectos",
+    title: "Efectos visuales",
+    seccion: "efectos",
+    order: [
+      "efectos_burger_imagen",
+      "efectos_llamas_estilo",
+      "efectos_llamas_velocidad",
+      "efectos_llamas_extincion",
+      "efectos_llamas_intensidad",
+    ],
+  },
+  {
     key: "hero",
     title: "Portada (hero)",
     seccion: "hero",
@@ -232,6 +244,18 @@ function SectionForm({
     Object.fromEntries(items.map((i) => [i.id, i.valor])),
   );
   const [saving, setSaving] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false);
+
+  // Campos "avanzados" que se ocultan detrás del toggle "Ver más parámetros".
+  const ADVANCED_IDS = new Set<string>([
+    "efectos_llamas_velocidad",
+    "efectos_llamas_extincion",
+    "efectos_llamas_intensidad",
+  ]);
+  const hasAdvanced = items.some((i) => ADVANCED_IDS.has(i.id));
+  const visibleItems = hasAdvanced && !showAdvanced
+    ? items.filter((i) => !ADVANCED_IDS.has(i.id))
+    : items;
 
   function setValue(id: string, v: string) {
     setValues((prev) => ({ ...prev, [id]: v }));
@@ -290,7 +314,7 @@ function SectionForm({
       </p>
 
       <div className="grid gap-5">
-        {items.map((b) =>
+        {visibleItems.map((b) =>
           b.tipo === "imagen" ? (
             <ImageField
               key={b.id}
@@ -298,6 +322,18 @@ function SectionForm({
               value={values[b.id] ?? ""}
               onChange={(v) => setValue(b.id, v)}
               onUpload={(file) => uploadImage(b.id, file)}
+            />
+          ) : b.id === "efectos_llamas_estilo" ? (
+            <SelectField
+              key={b.id}
+              bloque={b}
+              value={values[b.id] ?? ""}
+              onChange={(v) => setValue(b.id, v)}
+              options={[
+                { value: "realista", label: "Realista (por defecto)" },
+                { value: "velas", label: "Velas (finas y tranquilas)" },
+                { value: "infierno", label: "Infierno (grandes y agresivas)" },
+              ]}
             />
           ) : (
             <TextField
@@ -310,12 +346,53 @@ function SectionForm({
         )}
       </div>
 
-      <div className="mt-6 flex justify-end">
+      <div className="mt-6 flex justify-between items-center gap-3 flex-wrap">
+        {hasAdvanced ? (
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowAdvanced((v) => !v)}
+          >
+            {showAdvanced ? "Ocultar parámetros avanzados" : "Ver más parámetros"}
+          </Button>
+        ) : <span />}
         <Button onClick={onSave} disabled={saving}>
           {saving ? "Guardando…" : "Guardar cambios"}
         </Button>
       </div>
     </section>
+  );
+}
+
+function SelectField({
+  bloque,
+  value,
+  onChange,
+  options,
+}: {
+  bloque: Bloque;
+  value: string;
+  onChange: (v: string) => void;
+  options: { value: string; label: string }[];
+}) {
+  return (
+    <div>
+      <Label htmlFor={bloque.id} className="text-sm">
+        {bloque.etiqueta}
+      </Label>
+      <p className="text-[10px] text-muted-foreground/70 mb-1 font-mono">{bloque.id}</p>
+      <select
+        id={bloque.id}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>{o.label}</option>
+        ))}
+      </select>
+    </div>
   );
 }
 
