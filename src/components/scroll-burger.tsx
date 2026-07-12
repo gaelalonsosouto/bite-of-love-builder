@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useReducedMotion } from "motion/react";
 import { useLocation } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import burgerAsset from "@/assets/smash-burger.png.asset.json";
+import burgerAsset from "@/assets/smash-burger.webp";
 import { bloquesQueryOptions } from "@/lib/content";
 
 /**
@@ -10,7 +10,7 @@ import { bloquesQueryOptions } from "@/lib/content";
  * by the Black Cube website's rotating hero object. Perspective + rotateY +
  * rotateX + rotateZ give a coin-like tumble; no longer falls down the page.
  */
-const DEFAULT_BURGER_URL = burgerAsset.url;
+const DEFAULT_BURGER_URL = burgerAsset;
 
 export function ScrollBurger() {
   const reduce = useReducedMotion();
